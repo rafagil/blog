@@ -13,7 +13,7 @@ module.exports = function(conn, Sequelize) {
     pubDate: {
       type: Sequelize.DATE
     }
-    //Tags
+    //Tags, author
   });
   return Post;
 };

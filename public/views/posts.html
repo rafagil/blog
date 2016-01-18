@@ -1,3 +1,11 @@
+<button ng-click="create()">Add Post</button>
+<div ng-show="showAdd" id="create">
+	<h2>New post!</h2>
+	<p>Start editing Here!</p>
+</div>
+<div ng-if="showAdd">
+	<button ng-click="insert()">Save</button>
+</div>
 <ul>
 	<li ng-repeat="post in posts">
 		<h7>{{post.title}}</h7>

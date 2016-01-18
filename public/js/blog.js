@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, Pen */
 angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).config([
   '$httpProvider',
   '$stateProvider',
