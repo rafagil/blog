@@ -4,6 +4,9 @@ module.exports = function(conn, Sequelize) {
     title: {
       type: Sequelize.STRING
     },
+    summary: {
+      type: Sequelize.TEXT
+    },
     content: {
       type: Sequelize.TEXT
     },

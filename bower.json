@@ -1,0 +1,27 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "homepage": "http://www.rafaelgil.net",
+  "authors": [
+    "Rafael Gil <rafaelgil@outlook.com>"
+  ],
+  "description": "Personal Blog",
+  "keywords": [
+    "blog"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-ui-router": "~0.2.15",
+    "restangular": "~1.5.1",
+    "underscore": "~1.8.3"
+  }
+}

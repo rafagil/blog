@@ -1,0 +1,38 @@
+<!doctype html>
+<html ng-app="rafaelgil.blog"> 
+
+<head>
+	<title>Rafael's Blog</title>
+	<base href="/" />
+</head>
+
+<body>
+	<h1>Blog</h1>
+	<ui-view></ui-view>
+	<!-- vendor:js -->
+	
+	<script src="vendor/angular/angular.js"></script>
+	
+	<script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+	
+	<script src="vendor/lodash/lodash.js"></script>
+	
+	<script src="vendor/underscore/underscore.js"></script>
+	
+	<script src="vendor/restangular/dist/restangular.js"></script>
+	
+	<!-- endinject -->
+	<!-- inject:js -->
+
+	<script src="js/services/services.module.js"></script>
+
+	<script src="js/services/posts.service.js"></script>
+
+	<script src="js/blog.js"></script>
+
+	<script src="js/controllers/posts.controller.js"></script>
+
+	<!-- endinject -->
+</body>
+
+</html>
