@@ -27,10 +27,10 @@ build/Release
 node_modules
 
 # Bower Dependencies
-public/vendor
+front-end/vendor
 
 #database
-database/blog.db
+back-end/database/blog.db
 
 #visual Studio
 .vscode

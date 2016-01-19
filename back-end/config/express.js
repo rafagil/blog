@@ -1,6 +1,7 @@
 /* global process */
 module.exports = function() {
   'use strict';
+  var environment = process.env.NODE_ENV;
   var express = require('express');
   var load = require('express-load');
   var bodyParser = require('body-parser');
@@ -9,10 +10,17 @@ module.exports = function() {
   var passport = require('passport');
   var sequelize = require('./sequelize');
   var app = express();
+  
+  //Enables static web server only for development purposes.
+  //For production, you'll probably use Nginx or Apache with reverse proxy instead.
+  var enableStaticServer = environment === 'development'; 
 
   app.set('view engine', 'ejs');
   app.set('views', './views');
-  app.use(express.static('./public'));
+  if (enableStaticServer) {
+    app.use(express.static('../front-end'));
+  }
+  
   app.use(bodyParser.urlencoded({
     extended: true
   }));
@@ -36,7 +44,7 @@ module.exports = function() {
   load('controllers').into(app);
 
   //require('./passport')();
-  require('../routes/main')(app);
+  require('../routes/main')(app, enableStaticServer);
 
   return app;
 };
