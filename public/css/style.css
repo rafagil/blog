@@ -1,0 +1,11 @@
+.post input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid silver;
+  font-size: 24px;
+}
+
+.post #create {
+  width:100%;
+  background: #ffffee;
+}

@@ -1,10 +1,16 @@
-angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'PostsService', function ($scope, PostsService) {
+angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'PostsService', function($scope, PostsService) {
   'use strict';
 
   $scope.posts = [];
   var editor;
 
-  $scope.create = function () {
+  var list = function() {
+    PostsService.list().then(function(posts) {
+      $scope.posts = posts;
+    });
+  };
+
+  $scope.create = function() {
     $scope.showAdd = true;
     if (!editor) {
       editor = new Pen({
@@ -16,19 +22,36 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'Posts
     }
   };
 
-  $scope.insert = function () {
+  $scope.insert = function() {
     PostsService.create({
-      title: 'Needs a title here',
-      content: editor._prevContent,
-      summary: editor._prevContent
+      title: $scope.newTitle,
+      content: editor.getContent(),
+      summary: editor.getContent()
+    }).then(function() {
+      list();
+      $scope.showAdd = false;
+      editor.destroy();
     }); //needs summary, tags and stuff like that
-    editor.destroy();
   };
 
-  var init = function () {
-    PostsService.list().then(function (posts) {
-      $scope.posts = posts;
+  $scope.edit = function(post) {
+    post.editor = new Pen('#post_' + post.id);
+    post.editing = true;
+  };
+
+  $scope.save = function(post) {
+    var tmpEditor = post.editor;
+    delete post.editor;
+    post.content = tmpEditor.getContent();
+    post.summary = post.content;
+    PostsService.update(post).then(function() {
+      tmpEditor.destroy();
+      post.editing = false;
     });
+  };
+
+  var init = function() {
+    list();
   };
 
   init();

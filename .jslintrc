@@ -22,7 +22,8 @@
     "angular",
     "$",
     "_",
-    "alert"
+    "alert",
+    "Pen"
   ],
   "regexp": true,
   "rhino": false,
