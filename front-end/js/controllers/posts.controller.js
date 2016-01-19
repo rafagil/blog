@@ -1,58 +1,58 @@
-angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'PostsService', function($scope, PostsService) {
+/* global angular, Pen */
+angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'PostsService', 'EditorFactory', function ($scope, PostsService, EditorFactory) {
   'use strict';
 
   $scope.posts = [];
-  var editor;
+  var summaryEditor;
+  var contentEditor;
 
-  var list = function() {
-    PostsService.list().then(function(posts) {
+  var list = function () {
+    PostsService.list().then(function (posts) {
       $scope.posts = posts;
     });
   };
 
-  $scope.create = function() {
+  $scope.create = function () {
     $scope.showAdd = true;
-    if (!editor) {
-      editor = new Pen({
-        editor: document.querySelector('#create'),
-        list: ['bold', 'italic', 'underline']
-      });
-    } else {
-      editor.rebuild();
-    }
+    summaryEditor = EditorFactory.build('#newSummaryEditor');
+    contentEditor = EditorFactory.build('#newContentEditor');    
   };
 
-  $scope.insert = function() {
-    PostsService.create({
+  $scope.insert = function () {
+    var post = {
       title: $scope.newTitle,
-      content: editor.getContent(),
-      summary: editor.getContent()
-    }).then(function() {
-      list();
+      content: summaryEditor.getContent(),
+      summary: summaryEditor.getContent()
+    };
+    PostsService.create(post).then(function () {
+      $scope.init();
       $scope.showAdd = false;
-      editor.destroy();
-    }); //needs summary, tags and stuff like that
+      summaryEditor.destroy();
+      contentEditor.destroy();
+    }); //needs tags
   };
 
-  $scope.edit = function(post) {
-    post.editor = new Pen('#post_' + post.id);
+  $scope.edit = function (post) {
+    post.editor = EditorFactory.build('#post_' + post.id);
     post.editing = true;
   };
 
-  $scope.save = function(post) {
+  $scope.save = function (post) {
     var tmpEditor = post.editor;
     delete post.editor;
-    post.content = tmpEditor.getContent();
-    post.summary = post.content;
-    PostsService.update(post).then(function() {
+    post.summary = tmpEditor.getContent();
+    PostsService.update(post).then(function () {
       tmpEditor.destroy();
       post.editing = false;
     });
   };
 
-  var init = function() {
+  $scope.init = function () {
+    $scope.summaryPlaceholder = "Summary goes here!";
+    $scope.contentPlaceholder = "Content goes here!";
+    $scope.newTitle = "";
     list();
   };
 
-  init();
+  $scope.init();
 }]);

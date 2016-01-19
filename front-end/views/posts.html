@@ -1,21 +1,24 @@
 <button ng-click="create()">Add Post</button>
-<div ng-show="showAdd" class="post">
-	<input type="text" ng-model="newTitle" placeholder="Title" />
-	<div id="create">
-		<p>Start editing Here!</p>
-	</div>
-</div>
-<div ng-if="showAdd">
-	<button ng-click="insert()">Save</button>
-</div>
 <ul>
-	<li ng-repeat="post in posts" class="post">
-		<h7>
-			<span ng-hide="post.editing">{{post.title}}</span>
-			<input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" />
-			<button ng-click="edit(post)" ng-hide="post.editing">Pencil Icon</button>
-			<button ng-click="save(post)" ng-show="post.editing">Save Icon</button>
-		</h7>
-		<p id="post_{{post.id}}">{{post.summary}}</p>
-	</li>
+  <li ng-show="showAdd" class="post">
+    <h7>
+      <input type="text" ng-model="newTitle" placeholder="Title" />
+      <button ng-click="insert()">Save Icon</button>
+    </h7>
+    <div id="newSummaryEditor">
+      <p>{{summaryPlaceholder}}</p>
+    </div>
+    <div id="newContentEditor">
+      <p>{{contentPlaceholder}}</p>
+    </div>
+  </li>
+  <li ng-repeat="post in posts" class="post">
+    <h7>
+      <span ng-hide="post.editing">{{post.title}}</span>
+      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" />
+      <button ng-click="edit(post)" ng-hide="post.editing">Pencil Icon</button>
+      <button ng-click="save(post)" ng-show="post.editing">Save Icon</button>
+    </h7>
+    <div id="post_{{post.id}}" ng-bind-html="post.summary"></div>
+  </li>
 </ul>

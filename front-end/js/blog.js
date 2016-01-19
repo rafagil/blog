@@ -16,6 +16,11 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
         url: '/',
         templateUrl: 'views/posts.html',
         controller: 'PostsController'
+      })
+      .state('posts.view', {
+        url: '/:title',
+        templateUrl: 'views/post.html',
+        controller: 'PostController'
       });
 
     $urlRouterProvider.otherwise('/');

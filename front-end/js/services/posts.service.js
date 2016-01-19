@@ -1,9 +1,15 @@
-angular.module('rafaelgil.blog.services').factory('PostsService', ['Restangular', function (Restangular) {
+angular.module('rafaelgil.blog.services').factory('PostsService', ['Restangular', '$sce', function (Restangular, $sce) {
 	'use strict';
 	var service = {};
 
 	service.list = function() {
-		return Restangular.all('posts').getList();
+		return Restangular.all('posts').getList().then(function(posts) {
+      posts.forEach(function(post) {
+        $sce.trustAsHtml(post.summary);
+        $sce.trustAsHtml(post.contents);
+      });
+      return posts;
+    });
 	};
 
   service.create = function(post) {

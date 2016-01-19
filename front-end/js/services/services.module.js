@@ -1,4 +1,4 @@
-angular.module('rafaelgil.blog.services', ['restangular']).config([
+angular.module('rafaelgil.blog.services', ['restangular', 'ngSanitize']).config([
 	'RestangularProvider',
 	function (RestangularProvider) {
 		RestangularProvider.setBaseUrl('/api');
