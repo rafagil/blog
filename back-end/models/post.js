@@ -13,13 +13,7 @@ module.exports = function(conn, Sequelize) {
     pubDate: {
       type: Sequelize.DATE
     }
-    //Tags
   }, {
-    instanceMethods: {
-      getTags: function() {
-        console.log(this);
-      }
-    },
     classMethods: {
       associate: function(models) {
         Post.belongsTo(models.user);
