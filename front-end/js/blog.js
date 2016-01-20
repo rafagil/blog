@@ -12,6 +12,11 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
     $locationProvider.html5Mode(!isIE);
 
     $stateProvider
+      .state('login', {
+        url: '/login',
+        templateUrl: 'views/login.html',
+        controller: 'LoginController'
+      })
       .state('posts', {
         url: '/',
         templateUrl: 'views/posts.html',

@@ -1,5 +1,6 @@
 module.exports = function () {
   'use strict';
+  var environment = process.env.NODE_ENV;
   var Sequelize = require('sequelize');
   var conn = new Sequelize('BlogDB', 'admin', '1234', {
     dialect: 'sqlite',
@@ -21,7 +22,26 @@ module.exports = function () {
       models[modelName].associate(models);
     }
   });
-
-  conn.sync();
+  
+  if (environment === 'development') {
+    conn.sync().then(function() {
+      return models.user.findOrCreate({
+        where: {
+          email: 'rafaelgil@mail.com'
+        }, defaults : {
+          fistName: 'Rafael',
+          lastName: 'Gil',
+          email: 'rafaelgil@mail.com',
+          password: '123456'
+        }}).spread(function(user, created) {
+          if (created) {
+            console.log('Dev user created');
+          }
+      });
+    });
+  } else {
+    conn.sync();
+  }
+  
   return models;
 };

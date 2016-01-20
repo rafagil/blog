@@ -1,7 +1,6 @@
 module.exports = function (conn, Sequelize) {
   'use strict';
   var forge = require('node-forge');
-  var md = forge.md.sha1.create();
   var User = conn.define('User', {
     indexes: [{
       unique: true,
@@ -19,7 +18,9 @@ module.exports = function (conn, Sequelize) {
     password: {
       type: Sequelize.STRING,
       set: function(val) {
-        this.setDataValue('password', md.digest(val).toHex());
+        var md = forge.md.sha1.create();
+        md.update(val);
+        this.setDataValue('password', md.digest().toHex());
       }
     }
   });
