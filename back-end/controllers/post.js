@@ -4,7 +4,7 @@ module.exports = function(app) {
 	var Post = app.models.post;
 	
 	PostController.list = function(req, resp) {
-		Post.findAll().then(function(posts) {
+		Post.findAll({order:[['createdAt', 'DESC']]}).then(function(posts) {
 			resp.json(posts);
 		})
 	};
