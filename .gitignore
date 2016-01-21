@@ -30,7 +30,7 @@ node_modules
 front-end/vendor
 
 #database
-back-end/database/blog.db
+back-end/database/*.db
 back-end/tests/db/*.db
 
 #visual Studio
