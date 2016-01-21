@@ -1,5 +1,5 @@
 /* global process */
-module.exports = function() {
+module.exports = function(databasePath) {
   'use strict';
   var environment = process.env.NODE_ENV;
   var express = require('express');
@@ -44,11 +44,12 @@ module.exports = function() {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.models = sequelize();
-  load('controllers').into(app);
-
-  require('./passport')(app.models);
-  require('../routes/main')(app, enableStaticServer);
-
-  return app;
+  return sequelize(databasePath).then(function(models) {;
+    app.models = models;
+    load('controllers').into(app);
+    require('./passport')(app.models);
+    require('../routes/main')(app, enableStaticServer);
+  }).then(function() {
+    return app;
+  });
 };

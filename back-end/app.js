@@ -1,13 +1,9 @@
-/* global process */
-(function () {
+module.exports = function(serverIp, serverPort, databasePath) {
   'use strict';
 
-  var serverIp = process.env.OPENSHIFT_NODEJS_IP || 'localhost';
-  var serverPort = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-
-  var app = require('./config/express.js')();
-  app.listen(serverPort, serverIp, function () {
-    console.log('Blog server running on http://' + serverIp + ':' + serverPort);
+  return require('./config/express.js')(databasePath).then(function(app) {;
+    return app.listen(serverPort, serverIp, function () {
+      console.log('Blog server running on http://' + serverIp + ':' + serverPort);
+    });
   });
-
-} ());
+};

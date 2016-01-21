@@ -1,11 +1,14 @@
-module.exports = function () {
+/* global process */
+module.exports = function (databasePath) {
   'use strict';
-  var environment = process.env.NODE_ENV;
+  var q = require('Q');
   var Sequelize = require('sequelize');
+  var environment = process.env.NODE_ENV;
   var conn = new Sequelize('BlogDB', 'admin', '1234', {
     dialect: 'sqlite',
-    storage: './database/blog.db'
+    storage: databasePath
   });
+  
 
   var models = {};
 
@@ -23,6 +26,7 @@ module.exports = function () {
     }
   });
   
+  var d = q.defer();
   if (environment === 'development') {
     conn.sync().then(function() {
       return models.user.findOrCreate({
@@ -38,10 +42,14 @@ module.exports = function () {
             console.log('Dev user created');
           }
       });
+    }).then(function() {
+      d.resolve(models);
     });
   } else {
-    conn.sync();
+    conn.sync().then(function() {
+      d.resolve(models);
+    });
   }
   
-  return models;
+  return d.promise;
 };

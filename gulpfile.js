@@ -1,4 +1,4 @@
-/* global __dirname */
+/* global process, __dirname */
 (function () {
   'use strict';
 
@@ -10,6 +10,7 @@
   var inject = require('gulp-inject');
   var mainBowerFiles = require('main-bower-files');
   var filter = require('gulp-filter');
+  var mocha = require('gulp-mocha');
 
   var scriptFilter = '**/*.js';
 
@@ -93,13 +94,19 @@
 
   gulp.task('serve', ['inject-dev'], function () {
     nodemon({
-      script: 'app.js',
+      script: 'server.js',
       cwd: __dirname + '/back-end',
       env: { 'NODE_ENV': 'development' },
       ignore: ['front-end/*'],
       ext: 'js'
     });
     gulp.watch('front-end/js/**/*.js', ['inject-dev']);
+  });
+  
+  gulp.task('test', function() {
+    process.chdir('back-end');
+    gulp.src('tests/posts.test.js', {read: false})
+      .pipe(mocha());
   });
 
   gulp.task('default', ['dist']);
