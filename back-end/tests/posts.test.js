@@ -22,7 +22,7 @@
     beforeEach(function (done) {
       var query = 'DROP TABLE IF EXISTS POSTS;DROP TABLE IF EXISTS USERS';
       db.run(query, function() {
-        require(__dirname + '/../app')('localhost', '7357', tempDBPath).then(function (app) {
+        require(__dirname + '/../app')('localhost', '7357', tempDBPath, true).then(function (app) {
           server = app;
           done();
         });
@@ -116,7 +116,43 @@
         });
       });
     });
-    // it('Updates title creates a new url, and both works');
+
+    it('creates a new url when title is updated, and both works', function(done) {
+      createPost('Test Post', 'content', function() {
+
+        var updatedPost = {
+          title: 'New Post Title',
+          content: 'Post Contents'
+        };
+
+        var validateResponse = function(response) {
+          should(response.statusCode).equal(200);
+          should(response.text).not.equal('');
+          var post = JSON.parse(response.text);
+          post.length.should.equal(1);
+        };
+
+        login(function (cookies) {
+
+          var updateReq = request(server).put('/api/posts/' + 1);
+          updateReq.cookies = cookies;
+          updateReq.send(updatedPost).then(function(response) {
+            var req = request(server).get('/api/posts/').query({url: 'test-post'});
+            req.cookies = cookies;
+            req.send().then(function(response) {
+              validateResponse(response);
+
+              var req2 = request(server).get('/api/posts/').query({url: 'new-post-title'});
+              req2.cookies = cookies;
+              req2.send().then(function(response) {
+                validateResponse(response);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
 
   });
 } ());

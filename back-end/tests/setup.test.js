@@ -21,7 +21,7 @@
 
     beforeEach(function (done) {
       db.run('DROP TABLE IF EXISTS USERS', function() {
-        require(__dirname + '/../app')('localhost', '7357', tempDBPath).then(function (app) {
+        require(__dirname + '/../app')('localhost', '7357', tempDBPath, true).then(function (app) {
           server = app;
           done();
         });

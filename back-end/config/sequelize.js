@@ -6,7 +6,8 @@ module.exports = function (databasePath) {
   var environment = process.env.NODE_ENV;
   var conn = new Sequelize('BlogDB', 'admin', '1234', {
     dialect: 'sqlite',
-    storage: databasePath
+    storage: databasePath,
+    logging: environment === 'development'
   });
 
 
