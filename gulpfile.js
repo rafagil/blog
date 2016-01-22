@@ -102,11 +102,11 @@
     });
     gulp.watch('front-end/js/**/*.js', ['inject-dev']);
   });
-  
+
   gulp.task('test', function() {
     process.chdir('back-end');
-    gulp.src('tests/posts.test.js', {read: false})
-      .pipe(mocha());
+    gulp.src('tests/posts.test.js', {read: false}).pipe(mocha());
+    gulp.src('tests/setup.test.js', {read: false}).pipe(mocha());
   });
 
   gulp.task('default', ['dist']);

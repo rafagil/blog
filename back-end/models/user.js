@@ -13,10 +13,12 @@ module.exports = function (conn, Sequelize) {
       type: Sequelize.STRING
     },
     email: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      allowNull: false
     },
     password: {
       type: Sequelize.STRING,
+      allowNull: false,
       set: function(val) {
         var md = forge.md.sha1.create();
         md.update(val);

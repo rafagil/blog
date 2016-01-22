@@ -11,17 +11,17 @@ module.exports = function(databasePath) {
   var passport = require('passport');
   var sequelize = require('./sequelize');
   var app = express();
-  
+
   //Enables static web server only for development purposes.
   //For production, you'll probably use Nginx or Apache with reverse proxy instead.
-  var enableStaticServer = environment === 'development'; 
+  var enableStaticServer = environment === 'development';
 
   app.set('view engine', 'ejs');
   app.set('views', './views');
   if (enableStaticServer) {
     app.use(express.static('../front-end'));
   }
-  
+
   app.use(bodyParser.urlencoded({
     extended: true
   }));
@@ -45,10 +45,11 @@ module.exports = function(databasePath) {
   app.use(passport.session());
 
   return sequelize(databasePath).then(function(models) {;
-    app.models = models;
-    load('controllers').into(app);
-    require('./passport')(app.models);
-    require('../routes/main')(app, enableStaticServer);
+      app.models = models;
+      load('repositories').then('controllers').into(app);
+      require('./passport')(app.models);
+      require('../routes/main')(app, enableStaticServer);
+      require('../routes/setup')(app);
   }).then(function() {
     return app;
   });

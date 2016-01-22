@@ -12,6 +12,7 @@
     var server;
     var tempDBPath;
     var db;
+    this.timeout(5000);
 
     before(function() {
       tempDBPath = __dirname + '/db/posts.db';
@@ -25,15 +26,15 @@
         done();
       });
     });
-    
+
     after(function() {
       db.close();
-    })
+    });
 
     it('Gets posts', function testGetsPosts(done) {
       request(server).get('/api/posts').expect(200, done);
     });
-    
+
     it ('List Posts', function testListPosts(done) {
       var title = 'Test Post';
       var content = 'content';
@@ -46,14 +47,14 @@
         done();
       });
     });
-    
+
     it ('Forbids anonymous posting', function testAnonymousPost(done) {
       request(server).post('/api/posts').expect(401, done);
     });
-    
+
     it ('Forbids anonymous editing', function testAnonymousPut(done) {
       request(server).put('/api/posts/1').expect(401, done);
     });
-    
+
   })
 } ());
