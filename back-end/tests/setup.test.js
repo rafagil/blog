@@ -20,15 +20,26 @@
     });
 
     beforeEach(function (done) {
-      db.run('DROP TABLE IF EXISTS USERS');
-      require(__dirname + '/../app')('localhost', '7357', tempDBPath).then(function (app) {
-        server = app;
+      db.run('DROP TABLE IF EXISTS USERS', function() {
+        require(__dirname + '/../app')('localhost', '7357', tempDBPath).then(function (app) {
+          server = app;
+          done();
+        });
+      });
+    });
+
+    afterEach(function(done) {
+      server.close(function(err) {
         done();
       });
     });
 
-    var createUser = function() {
-      db.run("INSERT INTO USERS (email, password, createdAt, updatedAt) VALUES('a@mail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+    after(function () {
+      db.close();
+    });
+
+    var createUser = function(callback) {
+      db.run("INSERT INTO USERS (email, password, createdAt, updatedAt) VALUES('a@mail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", callback);
     };
 
     it('Allows setup if there is no user on the database', function(done) {
@@ -36,8 +47,9 @@
     });
 
     it('Forbids setup if there is an user', function(done) {
-      createUser();
-      request(server).get('/api/setup').expect(401, done);
+      createUser(function() {
+        request(server).get('/api/setup').expect(401, done);
+      });
     });
 
     it('Allows create an user if there is no user', function(done) {
@@ -59,8 +71,9 @@
     });
 
     it('Forbids create an user if there is an user on database', function(done) {
-      createUser();
-      request(server).post('/api/setup/users', {email: 'a@mail.com', password:'1234'}).expect(401, done);
+      createUser(function() {
+        request(server).post('/api/setup/users', {email: 'a@mail.com', password:'1234'}).expect(401, done);
+      });
     });
 
     it('Forbids create an user with no email', function(done) {

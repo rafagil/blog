@@ -8,7 +8,7 @@ module.exports = function (databasePath) {
     dialect: 'sqlite',
     storage: databasePath
   });
-  
+
 
   var models = {};
 
@@ -25,31 +25,11 @@ module.exports = function (databasePath) {
       models[modelName].associate(models);
     }
   });
-  
+
   var d = q.defer();
-  if (environment === 'development') {
-    conn.sync().then(function() {
-      return models.user.findOrCreate({
-        where: {
-          email: 'rafaelgil@mail.com'
-        }, defaults : {
-          fistName: 'Rafael',
-          lastName: 'Gil',
-          email: 'rafaelgil@mail.com',
-          password: '123456'
-        }}).spread(function(user, created) {
-          if (created) {
-            console.log('Dev user created');
-          }
-      });
-    }).then(function() {
-      d.resolve(models);
-    });
-  } else {
-    conn.sync().then(function() {
-      d.resolve(models);
-    });
-  }
-  
+  conn.sync().then(function() {
+    d.resolve(models);
+  });
+
   return d.promise;
 };

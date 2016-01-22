@@ -11,7 +11,11 @@ module.exports = function(app) {
 
 	PostController.find = function(req, resp) {
 		Post.findById(req.params.id).then(function(post) {
-			resp.json(post);
+			if (post) {
+        resp.json(post);
+      } else {
+        resp.status(404).end();
+      }
 		});
 	};
 
@@ -23,9 +27,17 @@ module.exports = function(app) {
 
 	PostController.update = function(req, resp) {
 		Post.findById(req.params.id).then(function(post) {
-			return post.update(req.body);
+			if (post) {
+        return post.update(req.body);
+      } else {
+        return false;
+      }
 		}).then(function(post) {
-			resp.json(post);
+			if (post) {
+        resp.json(post);
+      } else {
+        resp.status(404).end();
+      }
 		});
 	};
 
