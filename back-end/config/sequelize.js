@@ -1,7 +1,7 @@
 /* global process */
 module.exports = function (databasePath) {
   'use strict';
-  var q = require('Q');
+  var q = require('q');
   var Sequelize = require('sequelize');
   var environment = process.env.NODE_ENV;
   var conn = new Sequelize('BlogDB', 'admin', '1234', {
