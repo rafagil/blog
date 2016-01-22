@@ -21,7 +21,7 @@
 
     beforeEach(function (done) {
       var query = 'DROP TABLE IF EXISTS POSTS;DROP TABLE IF EXISTS USERS';
-      db.run(query, function() {
+      db.run(query, function () {
         require(__dirname + '/../app')('localhost', '7357', tempDBPath, true).then(function (app) {
           server = app;
           done();
@@ -29,8 +29,8 @@
       });
     });
 
-    afterEach(function(done) {
-      server.close(function(err) {
+    afterEach(function (done) {
+      server.close(function (err) {
         done();
       });
     });
@@ -44,14 +44,15 @@
     };
 
     var login = function (execute) {
-      db.run("INSERT INTO USERS (email, password, createdAt, updatedAt) VALUES('a@mail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
-      return request(server)
-        .post('/api/login')
-        .send({ username: 'a@mail.com', password: '1234' })
-        .end(function(err, res) {
-          var cookies = res.headers['set-cookie'].pop().split(';')[0];
-          execute(cookies, res.statusCode);
-        });
+      db.run("INSERT INTO USERS (email, password, createdAt, updatedAt) VALUES('a@mail.com', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", function () {
+        request(server)
+          .post('/api/login')
+          .send({ username: 'a@mail.com', password: '1234' })
+          .end(function (err, res) {
+            var cookies = res.headers['set-cookie'].pop().split(';')[0];
+            execute(cookies, res.statusCode);
+          });
+      });
     };
 
     it('Gets posts', function testGetsPosts(done) {
@@ -61,7 +62,7 @@
     it('List Posts', function testListPosts(done) {
       var title = 'Test Post';
       var content = 'content';
-      createPost(title, content, function() {
+      createPost(title, content, function () {
         request(server).get('/api/posts').then(function (response) {
           var post = JSON.parse(response.text);
           post.length.should.equal(1);
@@ -85,7 +86,7 @@
     });
 
     it('Can login', function testLogin(done) {
-      login(function(cookies, status) {
+      login(function (cookies, status) {
         status.should.equal(200);
         done();
       });
@@ -103,8 +104,8 @@
       });
     });
 
-    it('Updates a post', function(done) {
-      createPost('Test Post', 'content', function() {
+    it('Updates a post', function (done) {
+      createPost('Test Post', 'content', function () {
         var updatedPost = {
           title: 'New Post Title',
           content: 'Post Contents'
@@ -117,15 +118,15 @@
       });
     });
 
-    it('creates a new url when title is updated, and both works', function(done) {
-      createPost('Test Post', 'content', function() {
+    it('creates a new url when title is updated, and both works', function (done) {
+      createPost('Test Post', 'content', function () {
 
         var updatedPost = {
           title: 'New Post Title',
           content: 'Post Contents'
         };
 
-        var validateResponse = function(response) {
+        var validateResponse = function (response) {
           should(response.statusCode).equal(200);
           should(response.text).not.equal('');
           var post = JSON.parse(response.text);
@@ -136,15 +137,15 @@
 
           var updateReq = request(server).put('/api/posts/' + 1);
           updateReq.cookies = cookies;
-          updateReq.send(updatedPost).then(function(response) {
-            var req = request(server).get('/api/posts/').query({url: 'test-post'});
+          updateReq.send(updatedPost).then(function (response) {
+            var req = request(server).get('/api/posts/').query({ url: 'test-post' });
             req.cookies = cookies;
-            req.send().then(function(response) {
+            req.send().then(function (response) {
               validateResponse(response);
 
-              var req2 = request(server).get('/api/posts/').query({url: 'new-post-title'});
+              var req2 = request(server).get('/api/posts/').query({ url: 'new-post-title' });
               req2.cookies = cookies;
-              req2.send().then(function(response) {
+              req2.send().then(function (response) {
                 validateResponse(response);
                 done();
               });
