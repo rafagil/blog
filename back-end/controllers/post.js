@@ -32,13 +32,7 @@ module.exports = function (app) {
   };
 
   PostController.update = function (req, resp) {
-    PostRepo.findById(req.params.id).then(function (post) {
-      if (post) {
-        return post.update(req.body);
-      } else {
-        return false;
-      }
-    }).then(function (post) {
+    return PostRepo.update(req.params.id, req.body).then(function (post) {
       if (post) {
         resp.json(post);
       } else {

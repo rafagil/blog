@@ -18,21 +18,21 @@
       tempDBPath = __dirname + '/db/posts.db';
       db = new sqlite3.Database(tempDBPath);
     });
-    
+
     var execute = function (tables, callback) {
-    	var table = tables.pop();
-    	if (table) {
-    	  db.run('drop table if exists ' + table, function () {
+      var table = tables.pop();
+      if (table) {
+        db.run('drop table if exists ' + table, function () {
           execute(tables, callback);
         });
-    	} else {
-    	  callback();
-    	}
+      } else {
+        callback();
+      }
     };
-    
-    var deleteTables = function(callback) {
-    	var tables = ['posts', 'users', 'posturls'];
-    	execute(tables, callback);
+
+    var deleteTables = function (callback) {
+      var tables = ['posts', 'users', 'posturls'];
+      execute(tables, callback);
     };
 
     beforeEach(function (done) {
@@ -55,7 +55,9 @@
     });
 
     var createPost = function (title, content, callback) {
-      db.run("INSERT INTO POSTS (title, content, createdAt, updatedAt) VALUES ('" + title + "','" + content + "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", callback);
+      db.run("INSERT INTO POSTS (title, content, createdAt, updatedAt) VALUES ('" + title + "','" + content + "', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", function (post) {
+        db.run("INSERT INTO POSTURLS (url, postid, createdAt, updatedAt) VALUES ('" + title.split(' ').join('-').toLowerCase() + "', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)", callback);
+      });
     };
 
     var login = function (execute) {
@@ -145,7 +147,8 @@
           should(response.statusCode).equal(200);
           should(response.text).not.equal('');
           var post = JSON.parse(response.text);
-          post.length.should.equal(1);
+          post.title.should.equal(updatedPost.title);
+          post.content.should.equal(updatedPost.content);
         };
 
         login(function (cookies) {
