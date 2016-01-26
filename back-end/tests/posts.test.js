@@ -12,16 +12,31 @@
     var server;
     var tempDBPath;
     var db;
-    this.timeout(5000);
+    this.timeout(45000); // raspberry pi
 
     before(function () {
       tempDBPath = __dirname + '/db/posts.db';
       db = new sqlite3.Database(tempDBPath);
     });
+    
+    var execute = function (tables, callback) {
+    	var table = tables.pop();
+    	if (table) {
+    	  db.run('drop table if exists ' + table, function () {
+          execute(tables, callback);
+        });
+    	} else {
+    	  callback();
+    	}
+    };
+    
+    var deleteTables = function(callback) {
+    	var tables = ['posts', 'users', 'posturls'];
+    	execute(tables, callback);
+    };
 
     beforeEach(function (done) {
-      var query = 'DROP TABLE IF EXISTS POSTS;DROP TABLE IF EXISTS USERS';
-      db.run(query, function () {
+      deleteTables(function () {
         require(__dirname + '/../app')('localhost', '7357', tempDBPath, true).then(function (app) {
           server = app;
           done();

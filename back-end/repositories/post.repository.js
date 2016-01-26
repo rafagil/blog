@@ -9,7 +9,8 @@ module.exports = function (app) {
   };
 
   repo.findByURL = function(url) {
-    return PostURL.findAll({where: {url: url}}).then(function(postUrl) {
+    return PostURL.findAll().then(function(postUrl) {
+      console.log(postUrl);
       return postUrl.post;
     });
   };
@@ -21,7 +22,9 @@ module.exports = function (app) {
   repo.create = function(post) {
     return Post.create(post).then(function(post) {
       var postUrl = post.title.replace(' ', '-').toLowerCase();
-      PostURL.create({url: postUrl}).then(function() {
+      PostURL.create({url: postUrl, PostId: post.id}).then(function(url) {
+        console.log('posturl:');
+        console.log(url);
         return post; //It must return the post, not the URL!
       });
     });

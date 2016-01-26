@@ -12,7 +12,7 @@
     var server;
     var tempDBPath;
     var db;
-    this.timeout(5000);
+    this.timeout(45000); // raspberry pi
 
     before(function () {
       tempDBPath = __dirname + '/db/setup.db';
