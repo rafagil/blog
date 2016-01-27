@@ -1,5 +1,5 @@
 /* global angular, Pen */
-angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$state', 'PostsService', 'EditorFactory', function ($scope, $state, PostsService, EditorFactory) {
+angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$state', 'PostsService', 'EditorFactory', 'LoginService', function ($scope, $state, PostsService, EditorFactory, LoginService) {
   'use strict';
 
   $scope.posts = [];
@@ -9,6 +9,14 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
   var list = function () {
     PostsService.list().then(function (posts) {
       $scope.posts = posts;
+
+      if (!posts.length) {
+        LoginService.canSetup().then(function(can) {
+          if (can) {
+            $state.go('login');
+          }
+        });
+      }
     });
   };
 
@@ -21,7 +29,7 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
   $scope.insert = function () {
     var post = {
       title: $scope.newTitle,
-      content: summaryEditor.getContent(),
+      content: contentEditor.getContent(),
       summary: summaryEditor.getContent()
     };
     PostsService.create(post).then(function () {

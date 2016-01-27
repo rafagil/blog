@@ -48,8 +48,8 @@ module.exports = function(databasePath) {
       app.models = models;
       load('repositories').then('controllers').into(app);
       require('./passport')(app.models);
-      require('../routes/main')(app, enableStaticServer);
       require('../routes/setup')(app);
+      require('../routes/main')(app, enableStaticServer);
   }).then(function() {
     return app;
   });
