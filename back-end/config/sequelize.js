@@ -7,7 +7,7 @@ module.exports = function (databasePath) {
   var conn = new Sequelize('BlogDB', 'admin', '1234', {
     dialect: 'sqlite',
     storage: databasePath,
-    logging: environment === 'development'
+    logging: environment === 'development' ? console.log : false
   });
 
 
