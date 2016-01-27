@@ -12,6 +12,9 @@ module.exports = function(conn, Sequelize) {
     },
     pubDate: {
       type: Sequelize.DATE
+    },
+    url: {
+      type: Sequelize.STRING
     }
   }, {
     classMethods: {
@@ -21,6 +24,6 @@ module.exports = function(conn, Sequelize) {
       }
     }
   });
-  
+
   return Post;
 };

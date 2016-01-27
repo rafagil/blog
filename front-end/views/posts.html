@@ -20,5 +20,6 @@
       <button ng-click="save(post)" ng-show="post.editing">Save Icon</button>
     </h7>
     <div id="post_{{post.id}}" ng-bind-html="post.summary"></div>
+    <div><a href="javascript:void(0)" ng-click="viewPost(post)">Read More</a></div>
   </li>
 </ul>

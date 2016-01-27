@@ -4,6 +4,10 @@ module.exports = function (app) {
   var Post = app.models.post;
   var PostURL = app.models.posturl;
 
+  var getUrlFromTitle = function(title) {
+    return title.split(' ').join('-').toLowerCase();
+  };
+
   repo.list = function () {
     return Post.findAll({ order: [['createdAt', 'DESC']] });
   };
@@ -24,13 +28,13 @@ module.exports = function (app) {
   };
 
   repo.addUrl = function(title, postId) {
-    var postUrl = title.split(' ').join('-').toLowerCase();
-    return PostURL.create({url: postUrl, PostId: postId});
+    return PostURL.create({url: getUrlFromTitle(title), PostId: postId});
   };
 
   repo.create = function(post) {
+    post.url = getUrlFromTitle(post.title);
     return Post.create(post).then(function(post) {
-      return repo.addUrl(post.title, post.id).then(function(url) {
+      return repo.addUrl(post.title, post.id).then(function(url) { //TODO: move the PostURL handle to a sequelize hook
         return post; //It must return the post, not the URL!
       });
     });
@@ -39,8 +43,9 @@ module.exports = function (app) {
   repo.update = function(id, updatedPost) {
     return repo.findById(id).then(function(post) {
       if (post) {
-        if (updatedPost.title !== post.title) {
+        if (getUrlFromTitle(updatedPost.title) !== getUrlFromTitle(post.title)) { //TODO: move the PostURL handle to a sequelize hook
           return repo.addUrl(updatedPost.title, post.id).then(function() {
+            updatedPost.url = getUrlFromTitle(updatedPost.title);
             return post.update(updatedPost);
           });
         } else {

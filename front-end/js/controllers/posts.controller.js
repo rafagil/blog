@@ -1,5 +1,5 @@
 /* global angular, Pen */
-angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'PostsService', 'EditorFactory', function ($scope, PostsService, EditorFactory) {
+angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$state', 'PostsService', 'EditorFactory', function ($scope, $state, PostsService, EditorFactory) {
   'use strict';
 
   $scope.posts = [];
@@ -15,7 +15,7 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'Posts
   $scope.create = function () {
     $scope.showAdd = true;
     summaryEditor = EditorFactory.build('#newSummaryEditor');
-    contentEditor = EditorFactory.build('#newContentEditor');    
+    contentEditor = EditorFactory.build('#newContentEditor');
   };
 
   $scope.insert = function () {
@@ -44,6 +44,12 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', 'Posts
     PostsService.update(post).then(function () {
       tmpEditor.destroy();
       post.editing = false;
+    });
+  };
+
+  $scope.viewPost = function(post) {
+    PostsService.find(post.url).then(function (post) {
+      $state.go('post-view', {post: post, url: post.url}); //Pre-loading the post here prevents opening a page without any content.
     });
   };
 

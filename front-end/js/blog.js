@@ -22,8 +22,9 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
         templateUrl: 'views/posts.html',
         controller: 'PostsController'
       })
-      .state('posts.view', {
-        url: '/:title',
+      .state('post-view', {
+        url: '/:url',
+        params: {'post': null},
         templateUrl: 'views/post.html',
         controller: 'PostController'
       });
