@@ -4,6 +4,6 @@
   <button ng-click="edit(post)" ng-hide="post.editing">Pencil Icon</button>
   <button ng-click="save(post)" ng-show="post.editing">Save Icon</button>
 </h1>
-<div class="postContainer" ng-bind-html="post.content">
+<div id="post_{{post.id}}" class="postContainer" ng-bind-html="post.content">
 </div>
 <a ui-sref="posts">Back</a>
