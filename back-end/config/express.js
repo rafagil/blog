@@ -7,7 +7,6 @@ module.exports = function(databasePath) {
   var bodyParser = require('body-parser');
   var cookieParser = require('cookie-parser');
   var session = require('express-session');
-  var SQLiteStore = require('connect-sqlite3')(session);
   var passport = require('passport');
   var sequelize = require('./sequelize');
   var app = express();
@@ -36,10 +35,7 @@ module.exports = function(databasePath) {
   app.use(session({
     secret: 'SessaoSecretaBlog',
     resave: true,
-    saveUninitialized: true,
-    store: new SQLiteStore({
-      db: './database/sessions'
-    })
+    saveUninitialized: true
   }));
   app.use(passport.initialize());
   app.use(passport.session());
