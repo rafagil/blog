@@ -1,9 +1,31 @@
-<h1>
-  <span ng-hide="post.editing">{{post.title}}</span>
-  <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" />
-  <button ng-click="edit(post)" ng-hide="post.editing">Pencil Icon</button>
-  <button ng-click="save(post)" ng-show="post.editing">Save Icon</button>
-</h1>
-<div id="post_{{post.id}}" class="postContainer" ng-bind-html="post.content">
-</div>
-<a ui-sref="posts">Back</a>
+<article class="post">
+  <header>
+    <div class="title">
+      <h2><a href="#" ng-hide="post.editing">{{post.title}}</a>
+      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="edit(post)" ng-hide="post.editing" ng-if="loggedIn"></a>
+      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" ng-if="loggedIn" /></h2>
+    </div>
+    <div class="meta">
+      <time class="published" datetime="2015-11-01">{{post.pubDate}}</time>
+      <a href="#" class="author"><span class="name">{{post.author}}</span><img src="images/avatar.jpg" alt="" /></a>
+    </div>
+  </header>
+  <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+  <p id="post_{{post.id}}" ng-bind-html="post.content"></p>
+  <footer>
+    <ul class="actions" ng-if="loggedIn">
+      <li>
+        <button ng-click="save(post)" class="button big" ng-show="post.editing"><i class="fa fa-check-square"></i> Save</button>
+      </li>
+    </ul>
+    <ul class="stats">
+      <li><a href="#">General</a></li>
+      <li><a href="#" class="icon fa-heart">28</a></li>
+      <li><a href="#" class="icon fa-comment">128</a></li>
+    </ul>
+  </footer>
+</article>
+
+<ul class="actions pagination">
+  <li><a ui-sref="posts" class="button big previous">Return</a></li>
+</ul>
