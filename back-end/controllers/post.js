@@ -5,18 +5,18 @@ module.exports = function (app) {
 
   PostController.list = function (req, resp) {
     if (req.query.url) {
-      PostRepo.findByURL(req.query.url).then(function(posts) {
+      return PostRepo.findByURL(req.query.url).then(function(posts) {
         resp.json(posts);
       });
     } else {
-      PostRepo.list().then(function (posts) {
+      return PostRepo.list().then(function (posts) {
         resp.json(posts);
       });
     }
   };
 
   PostController.find = function (req, resp) {
-    PostRepo.findById(req.params.id).then(function (post) {
+    return PostRepo.findById(req.params.id).then(function (post) {
       if (post) {
         resp.json(post);
       } else {
@@ -26,7 +26,7 @@ module.exports = function (app) {
   };
 
   PostController.add = function (req, resp) {
-    PostRepo.create(req.body).then(function (post) {
+    return PostRepo.create(req.body).then(function (post) {
       resp.json(post);
     });
   };

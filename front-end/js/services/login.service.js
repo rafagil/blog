@@ -1,9 +1,13 @@
-angular.module('rafaelgil.blog.services').factory('LoginService', ['Restangular', function (Restangular) {
+angular.module('rafaelgil.blog.services').factory('LoginService', ['Restangular', '$q', function (Restangular, $q) {
   'use strict';
-  var service = {};
+  var service = {
+    currentUser: null
+  };
 
   service.login = function(user) {
-    return Restangular.all('login').post(user);
+    return Restangular.all('login').post(user).then(function(user) {
+      service.currentUser = user;
+    });
   };
 
   service.canSetup = function() {
@@ -14,6 +18,21 @@ angular.module('rafaelgil.blog.services').factory('LoginService', ['Restangular'
 
   service.createUser = function(user) {
     return Restangular.all('setup').all('users').post(user);
+  };
+
+  service.getCurrentUser = function() {
+    var d = $q.defer();
+    if (service.currentUser) {
+      d.resolve(service.currentUser);
+    } else {
+      Restangular.all('users').one('current').get().then(function(user) {
+        if (user) {
+          service.currentUser = user;
+          d.resolve(user);
+        }
+      });
+    }
+    return d.promise;
   };
 
   return service;

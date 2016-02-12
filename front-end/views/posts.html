@@ -1,25 +1,48 @@
-<button ng-click="create()">Add Post</button>
-<ul>
-  <li ng-show="showAdd" class="post">
-    <h7>
-      <input type="text" ng-model="newTitle" placeholder="Title" />
+<!-- new post -->
+<button ng-click="create()" ng-if="loggedIn"><i class="fa fa-plus-square"></i> Add Post</button>
+<article class="post" ng-show="showAdd" ng-if="loggedIn">
+  <header>
+    <div class="title">
+      <h2><input type="text" ng-model="newTitle" placeholder="Title" /></h2>
+    </div>
+    <div class="meta">
       <button ng-click="insert()">Save Icon</button>
-    </h7>
-    <div id="newSummaryEditor">
-      <p>{{summaryPlaceholder}}</p>
+      <a href="#" class="author"><span class="name">{{post.author}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
-    <div id="newContentEditor">
-      <p>{{contentPlaceholder}}</p>
+  </header>
+  <div id="newSummaryEditor">
+    <p>{{summaryPlaceholder}}</p>
+  </div>
+  <div id="newContentEditor">
+    <p>{{contentPlaceholder}}</p>
+  </div>
+</article>
+<!-- post list -->
+<article class="post" ng-repeat="post in posts">
+  <header>
+    <div class="title">
+      <h2><a href="#" ng-hide="post.editing">{{post.title}}</a>
+      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="edit(post)" ng-hide="post.editing" ng-if="loggedIn"></a>
+      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" ng-if="loggedIn" /></h2>
     </div>
-  </li>
-  <li ng-repeat="post in posts" class="post">
-    <h7>
-      <span ng-hide="post.editing">{{post.title}}</span>
-      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" />
-      <button ng-click="edit(post)" ng-hide="post.editing">Pencil Icon</button>
-      <button ng-click="save(post)" ng-show="post.editing">Save Icon</button>
-    </h7>
-    <div id="post_{{post.id}}" ng-bind-html="post.summary"></div>
-    <div><a href="javascript:void(0)" ng-click="viewPost(post)">Read More</a></div>
-  </li>
-</ul>
+    <div class="meta">
+      <time class="published" datetime="2015-11-01">{{post.pubDate}}</time>
+      <a href="#" class="author"><span class="name">{{post.author}}</span><img src="images/avatar.jpg" alt="" /></a>
+    </div>
+  </header>
+  <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+  <p id="post_{{post.id}}" ng-bind-html="post.summary"></p>
+  <footer>
+    <ul class="actions">
+      <li>
+        <a href="javascript:void(0)" class="button big" ng-click="viewPost(post)" ng-hide="post.editing">Continue Reading</a>
+        <button ng-click="save(post)"  class="button big" ng-show="post.editing" ng-if="loggedIn"><i class="fa fa-check-square"></i> Save</button>
+        </li>
+    </ul>
+    <ul class="stats">
+      <li><a href="#">General</a></li>
+      <li><a href="#" class="icon fa-heart">28</a></li>
+      <li><a href="#" class="icon fa-comment">128</a></li>
+    </ul>
+  </footer>
+</article>

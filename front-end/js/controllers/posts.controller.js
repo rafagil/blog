@@ -65,6 +65,9 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
     $scope.summaryPlaceholder = "Summary goes here!";
     $scope.contentPlaceholder = "Content goes here!";
     $scope.newTitle = "";
+    LoginService.getCurrentUser().then(function(user) {
+      $scope.loggedIn = !!user;
+    });
     list();
   };
 

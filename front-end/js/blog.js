@@ -30,6 +30,5 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
       });
 
     $urlRouterProvider.otherwise('/');
-    //$httpProvider.interceptors.push('ResponseStatusInterceptorService');
   }
 ]);

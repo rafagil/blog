@@ -4,20 +4,22 @@ module.exports = function (app, enableStaticServer) {
 
   var passport = require('passport');
 	var controllers = app.controllers;
-  
+
   var checkAuth = function(req, res, next) {
-    if (req.isAuthenticated() || req.session.user) {
+    if (req.isAuthenticated()) {
       return next();
     } else {
       res.status(401).end();
     }
   };
 
+  //Posts:
 	app.get('/api/posts', controllers.post.list);
 	app.get('/api/posts/:id', controllers.post.find);
 	app.put('/api/posts/:id', checkAuth, controllers.post.update);
 	app.post('/api/posts', checkAuth, controllers.post.add);
 
+  //Login:
   app.post('/api/login', passport.authenticate('local'), function(req, res) {
     res.status(200).end();
   });
@@ -26,7 +28,9 @@ module.exports = function (app, enableStaticServer) {
     req.session.destroy();
     res.status(200).end();
   });
+  app.get('/api/users/current', controllers.user.current);
 
+  //Static:
   if (enableStaticServer) {
     //All (Html 5 mode on angular):
     app.get('/*', function (req, res) {
