@@ -9,8 +9,11 @@ module.exports = function (app) {
         resp.json(posts);
       });
     } else {
-      return PostRepo.list().then(function (posts) {
-        resp.json(posts);
+      var page = parseInt(req.headers.page, 10);
+      var pageSize = parseInt(req.headers.pagesize, 10);
+      return PostRepo.list(page, pageSize).then(function (result) {
+        resp.append('totalResults', result.count);
+        resp.json(result.posts);
       });
     }
   };

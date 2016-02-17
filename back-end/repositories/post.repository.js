@@ -8,8 +8,22 @@ module.exports = function (app) {
     return title.split(' ').join('-').toLowerCase();
   };
 
-  repo.list = function () {
-    return Post.findAll({ order: [['createdAt', 'DESC']] });
+  repo.list = function (page, pageSize) {
+    var params = {
+      order: [['createdAt', 'DESC']]
+    };
+    if (page && pageSize) {
+      params.limit = pageSize;
+      params.offset = (page -1) * pageSize;
+    }
+    var result = {};
+    return Post.findAll(params).then(function(posts){
+      result.posts = posts;
+      return Post.count();
+    }).then(function(count) {
+      result.count = count;
+      return result;
+    });
   };
 
   repo.findByURL = function(url) {
