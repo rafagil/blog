@@ -8,12 +8,15 @@ angular.module('rafaelgil.blog.services').factory('PostsService', ['Restangular'
     return post;
   };
 
-  service.list = function () {
-    return Restangular.all('posts').getList().then(function (posts) {
+  service.list = function (paginationInfo) {
+    return Restangular.all('posts').getList({}, paginationInfo).then(function (posts) {
       posts.forEach(function (post) {
         trust(post);
       });
-      return posts;
+      return {
+        posts: posts,
+        totalResults: 3
+      };
     });
   };
 

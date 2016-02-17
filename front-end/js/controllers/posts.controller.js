@@ -2,21 +2,28 @@
 angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$state', 'PostsService', 'EditorFactory', 'LoginService', function ($scope, $state, PostsService, EditorFactory, LoginService) {
   'use strict';
 
+  $scope.paginationInfo = {
+    page: 1,
+    pageSize: 5
+  };
+
+  $scope.canGoBack = false;
   $scope.posts = [];
   var summaryEditor;
   var contentEditor;
 
   var list = function () {
-    PostsService.list().then(function (posts) {
-      $scope.posts = posts;
-
-      if (!posts.length) {
-        LoginService.canSetup().then(function(can) {
+    PostsService.list($scope.paginationInfo).then(function (result) {
+      $scope.canGoBack = ($scope.paginationInfo.page) * $scope.paginationInfo.pageSize <= result.totalResults;
+      $scope.posts = result.posts;
+      if (!result.posts.length) {
+        LoginService.canSetup().then(function (can) {
           if (can) {
             $state.go('login');
           }
         });
       }
+      window.scrollTo(0,0);
     });
   };
 
@@ -55,17 +62,31 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
     });
   };
 
-  $scope.viewPost = function(post) {
+  $scope.viewPost = function (post) {
     PostsService.find(post.url).then(function (post) {
-      $state.go('post-view', {post: post, url: post.url}); //Pre-loading the post here prevents opening a page without any content.
+      $state.go('post-view', { post: post, url: post.url }); //Pre-loading the post here prevents opening a page without any content.
     });
+  };
+
+  $scope.olderPosts = function () {
+    if ($scope.canGoBack) {
+      $scope.paginationInfo.page++;
+      list();
+    }
+  };
+
+  $scope.newerPosts = function () {
+    if ($scope.paginationInfo.page > 1) {
+      $scope.paginationInfo.page--;
+      list();
+    }
   };
 
   $scope.init = function () {
     $scope.summaryPlaceholder = "Summary goes here!";
     $scope.contentPlaceholder = "Content goes here!";
     $scope.newTitle = "";
-    LoginService.getCurrentUser().then(function(user) {
+    LoginService.getCurrentUser().then(function (user) {
       $scope.loggedIn = !!user;
     });
     list();

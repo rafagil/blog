@@ -49,6 +49,6 @@
 
 <!-- Pagination -->
 <ul class="actions pagination">
-  <li><a href="" class="disabled button big previous">Previous Page</a></li>
-  <li><a href="#" class="button big next">Next Page</a></li>
+  <li><button ng-click="olderPosts()" class="button big previous" ng-show="canGoBack">Older Posts</button></li>
+  <li><button ng-click="newerPosts()" class="button big next" ng-show="paginationInfo.page > 1">Newer Posts</button></li>
 </ul>
