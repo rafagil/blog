@@ -1,4 +1,4 @@
-angular.module('rafaelgil.blog.services').factory('PostsService', ['Restangular', '$sce', function (Restangular, $sce) {
+angular.module('rafaelgil.blog.services').factory('PostsService', ['Restangular', 'RestFullResponse', '$sce', function (Restangular, RestFullResponse, $sce) {
   'use strict';
   var service = {};
 
@@ -9,13 +9,14 @@ angular.module('rafaelgil.blog.services').factory('PostsService', ['Restangular'
   };
 
   service.list = function (paginationInfo) {
-    return Restangular.all('posts').getList({}, paginationInfo).then(function (posts) {
+    return RestFullResponse.all('posts').getList({}, paginationInfo).then(function (response) {
+      var posts = response.data;
       posts.forEach(function (post) {
         trust(post);
       });
       return {
         posts: posts,
-        totalResults: 3
+        totalResults: parseInt(response.headers('totalResults'), 10)
       };
     });
   };
