@@ -8,6 +8,10 @@
   },
   "author": "Rafael Gil",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafagil/blog"
+  },
   "dependencies": {
     "body-parser": "^1.14.2",
     "cookie-parser": "^1.4.1",
