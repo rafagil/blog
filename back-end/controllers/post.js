@@ -29,6 +29,7 @@ module.exports = function (app) {
   };
 
   PostController.add = function (req, resp) {
+    req.body.userId = req.user.id;
     return PostRepo.create(req.body).then(function (post) {
       resp.json(post);
     });

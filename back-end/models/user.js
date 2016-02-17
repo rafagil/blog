@@ -6,10 +6,7 @@ module.exports = function (conn, Sequelize) {
       unique: true,
       fields: ['email']
     }],
-    fistName: {
-      type: Sequelize.STRING
-    },
-    lastName: {
+    name: {
       type: Sequelize.STRING
     },
     email: {

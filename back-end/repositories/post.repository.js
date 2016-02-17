@@ -3,6 +3,7 @@ module.exports = function (app) {
   var repo = {};
   var Post = app.models.post;
   var PostURL = app.models.posturl;
+  var User = app.models.user;
 
   var getUrlFromTitle = function(title) {
     return title.split(' ').join('-').toLowerCase();
@@ -10,7 +11,8 @@ module.exports = function (app) {
 
   repo.list = function (page, pageSize) {
     var params = {
-      order: [['createdAt', 'DESC']]
+      order: [['createdAt', 'DESC']],
+      include: [User]
     };
     if (page && pageSize) {
       params.limit = pageSize;

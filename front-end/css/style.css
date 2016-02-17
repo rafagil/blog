@@ -1,11 +1,9 @@
-.post input {
+.title input {
   width: 100%;
   border: none;
-  border-bottom: 1px solid silver;
-  font-size: 24px;
-}
-
-.post #create {
-  width:100%;
-  background: #ffffee;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  background: inherit;
+  height: inherit;
+  font: inherit;
 }

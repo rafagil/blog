@@ -6,9 +6,11 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
     page: 1,
     pageSize: 5
   };
+  $scope.newForm = {};
 
   $scope.canGoBack = false;
   $scope.posts = [];
+  $scope.currentUser = "";
   var summaryEditor;
   var contentEditor;
 
@@ -35,7 +37,7 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
 
   $scope.insert = function () {
     var post = {
-      title: $scope.newTitle,
+      title: $scope.newForm.newTitle,
       content: contentEditor.getContent(),
       summary: summaryEditor.getContent()
     };
@@ -83,11 +85,12 @@ angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$stat
   };
 
   $scope.init = function () {
-    $scope.summaryPlaceholder = "Summary goes here!";
-    $scope.contentPlaceholder = "Content goes here!";
-    $scope.newTitle = "";
+    $scope.newForm.summaryPlaceholder = "Summary goes here!";
+    $scope.newForm.contentPlaceholder = "Content goes here!";
+    $scope.newForm.newTitle = "";
     LoginService.getCurrentUser().then(function (user) {
       $scope.loggedIn = !!user;
+      $scope.currentUser = user;
     });
     list();
   };
