@@ -3,8 +3,8 @@ angular.module('rafaelgil.blog.services', ['restangular', 'ngSanitize']).config(
   function (RestangularProvider) {
     RestangularProvider.setBaseUrl('/api');
   }
-]).factory('RestFullResponse', function (Restangular) {
+]).factory('RestFullResponse', ['Restangular', function (Restangular) {
   return Restangular.withConfig(function (RestangularConfigurer) {
     RestangularConfigurer.setFullResponse(true);
   });
-});
+}]);
