@@ -39,20 +39,6 @@ module.exports = function (app) {
     return Post.find(params).then(function (post) {
       return post;
     });
-
-    // return PostURL.find(params).then(function (postUrl) {
-    //   if (postUrl) {
-    //     var post = postUrl.Post;
-    //     return post.getUser().then(function(user) {
-    //       post.User = user;
-    //       return post;
-    //     });
-    //     // return postUrl.getPost().then(function (post) {
-    //     //   return post;
-    //     // });
-    //   }
-    //   return null;
-    // });
   };
 
   repo.findById = function (id) {
