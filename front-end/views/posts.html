@@ -1,12 +1,12 @@
 <!-- new post -->
-<button ng-click="create()" ng-if="loggedIn"><i class="fa fa-plus-square"></i> Add Post</button>
+<button ng-click="create()" ng-if="loggedIn" id="addPostButton"><i class="fa fa-plus-square"></i> Add Post</button>
 <article class="post" ng-show="showAdd" ng-if="loggedIn">
   <header>
     <div class="title">
       <h2><input type="text" ng-model="newForm.newTitle" placeholder="Title" /></h2>
     </div>
     <div class="meta">
-      <a href="#" class="author"><span class="name">{{currentUser.name}}</span><img src="images/avatar.jpg" alt="" /></a>
+      <a href="#" class="author"><span class="name">{{::currentUser.name}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
   </header>
   <div id="newSummaryEditor">
@@ -32,12 +32,12 @@
       <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" ng-if="loggedIn" /></h2>
     </div>
     <div class="meta">
-      <time class="published" datetime="2015-11-01">{{post.pubDate}}</time>
-      <a href="#" class="author"><span class="name">{{post.User.name}}</span><img src="images/avatar.jpg" alt="" /></a>
+      <time class="published" datetime="2015-11-01">{{::post.pubDate}}</time>
+      <a href="#" class="author"><span class="name">{{::post.User.name}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
   </header>
   <!--a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a-->
-  <p id="post_{{post.id}}" ng-bind-html="post.summary"></p>
+  <p id="post_{{post.id}}" ng-bind-html="::post.summary"></p>
   <footer>
     <ul class="actions">
       <li>
@@ -45,11 +45,11 @@
         <button ng-click="save(post)" class="button big" ng-show="post.editing" ng-if="loggedIn"><i class="fa fa-check-square"></i> Save</button>
       </li>
     </ul>
-    <ul class="stats">
+    <!--ul class="stats">
       <li><a href="#">General</a></li>
       <li><a href="#" class="icon fa-heart">28</a></li>
       <li><a href="#" class="icon fa-comment">128</a></li>
-    </ul>
+    </ul-->
   </footer>
 </article>
 

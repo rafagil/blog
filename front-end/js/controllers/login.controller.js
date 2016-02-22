@@ -1,33 +1,38 @@
-angular.module('rafaelgil.blog').controller('LoginController', ['$scope', '$state', 'LoginService', function ($scope, $state, LoginService) {
+(function () {
   'use strict';
 
-  $scope.setup = false;
-  $scope.user = {};
+  function LoginController($scope, $state, LoginService) {
+    $scope.setup = false;
+    $scope.user = {};
 
-  $scope.login = function() {
-    LoginService.login($scope.user).then(function(user) {
-      $state.go('posts');
-    }).catch(function(e) {
-      alert('Invalid User!');
-    });
-  };
-
-  $scope.createUser = function() {
-    if ($scope.user.password !== $scope.user.passwordRetype) {
-      alert('Both passwords must be the same!');
-    } else {
-      LoginService.createUser($scope.user).then(function() {
-        $scope.user.username = $scope.user.email;
-        $scope.login();
+    $scope.login = function () {
+      LoginService.login($scope.user).then(function (user) {
+        $state.go('posts');
+      }).catch(function (e) {
+        alert('Invalid User!');
       });
-    }
-  };
+    };
 
-  var init = function() {
-    LoginService.canSetup().then(function(can) {
-      $scope.setup = can;
-    });
-  };
+    $scope.createUser = function () {
+      if ($scope.user.password !== $scope.user.passwordRetype) {
+        alert('Both passwords must be the same!');
+      } else {
+        LoginService.createUser($scope.user).then(function () {
+          $scope.user.username = $scope.user.email;
+          $scope.login();
+        });
+      }
+    };
 
-  init();
-}]);
+    var init = function () {
+      LoginService.canSetup().then(function (can) {
+        $scope.setup = can;
+      });
+    };
+
+    init();
+  }
+
+  angular.module('rafaelgil.blog')
+    .controller('LoginController', ['$scope', '$state', 'LoginService', LoginController]);
+} ());
