@@ -5,7 +5,7 @@ module.exports = function (app) {
   var PostURL = app.models.posturl;
   var User = app.models.user;
 
-  var getUrlFromTitle = function(title) {
+  var getUrlFromTitle = function (title) {
     return title.split(' ').join('-').toLowerCase();
   };
 
@@ -14,53 +14,69 @@ module.exports = function (app) {
       order: [['createdAt', 'DESC']],
       include: [User]
     };
+
     if (page && pageSize) {
       params.limit = pageSize;
-      params.offset = (page -1) * pageSize;
+      params.offset = (page - 1) * pageSize;
     }
-    var result = {};
-    return Post.findAll(params).then(function(posts){
-      result.posts = posts;
-      return Post.count();
-    }).then(function(count) {
-      result.count = count;
-      return result;
+
+    return Post.findAndCountAll(params).then(function (result) {
+      return {
+        posts: result.rows,
+        count: result.count
+      };
     });
   };
 
-  repo.findByURL = function(url) {
-    return PostURL.find({where: {url : url}}).then(function(postUrl) {
-      if (postUrl) {
-        return postUrl.getPost().then(function(post) {
-          return post;
-        });
-      }
-      return null;
+  repo.findByURL = function (url) {
+    var params = {
+      include: [{
+        model: PostURL,
+        where: { url: url },
+      }, User]
+    };
+
+    return Post.find(params).then(function (post) {
+      return post;
     });
+
+    // return PostURL.find(params).then(function (postUrl) {
+    //   if (postUrl) {
+    //     var post = postUrl.Post;
+    //     return post.getUser().then(function(user) {
+    //       post.User = user;
+    //       return post;
+    //     });
+    //     // return postUrl.getPost().then(function (post) {
+    //     //   return post;
+    //     // });
+    //   }
+    //   return null;
+    // });
   };
 
-  repo.findById = function(id) {
+  repo.findById = function (id) {
     return Post.findById(id);
   };
 
-  repo.addUrl = function(title, postId) {
-    return PostURL.create({url: getUrlFromTitle(title), PostId: postId});
+  repo.addUrl = function (title, postId) {
+    return PostURL.create({ url: getUrlFromTitle(title), PostId: postId });
   };
 
-  repo.create = function(post) {
+  repo.create = function (post) {
     post.url = getUrlFromTitle(post.title);
-    return Post.create(post).then(function(post) {
-      return repo.addUrl(post.title, post.id).then(function(url) { //TODO: move the PostURL handle to a sequelize hook
+    return Post.create(post).then(function (post) {
+      return repo.addUrl(post.title, post.id).then(function (url) { //TODO: move the PostURL handle to a sequelize hook
         return post; //It must return the post, not the URL!
       });
     });
   };
 
-  repo.update = function(id, updatedPost) {
-    return repo.findById(id).then(function(post) {
+  repo.update = function (id, updatedPost) {
+    return repo.findById(id).then(function (post) {
       if (post) {
         if (getUrlFromTitle(updatedPost.title) !== getUrlFromTitle(post.title)) { //TODO: move the PostURL handle to a sequelize hook
-          return repo.addUrl(updatedPost.title, post.id).then(function() {
+          return repo.addUrl(updatedPost.title, post.id).then(function () {
             updatedPost.url = getUrlFromTitle(updatedPost.title);
             return post.update(updatedPost);
           });

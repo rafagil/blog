@@ -21,6 +21,7 @@ module.exports = function(conn, Sequelize) {
       associate: function(models) {
         Post.belongsTo(models.user);
         Post.belongsToMany(models.tag, {through: 'PostTag'});
+        Post.hasMany(models.posturl);
       }
     }
   });
