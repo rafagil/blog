@@ -1,32 +1,33 @@
 (function () {
   'use strict';
 
-  function LoginController($scope, $state, LoginService) {
-    $scope.setup = false;
-    $scope.user = {};
+  function LoginController($state, LoginService) {
+    var vm = this;
+    vm.setup = false;
+    vm.user = {};
 
-    $scope.login = function () {
-      LoginService.login($scope.user).then(function (user) {
+    vm.login = function () {
+      LoginService.login(vm.user).then(function (user) {
         $state.go('posts');
       }).catch(function (e) {
         alert('Invalid User!');
       });
     };
 
-    $scope.createUser = function () {
-      if ($scope.user.password !== $scope.user.passwordRetype) {
+    vm.createUser = function () {
+      if (vm.user.password !== vm.user.passwordRetype) {
         alert('Both passwords must be the same!');
       } else {
-        LoginService.createUser($scope.user).then(function () {
-          $scope.user.username = $scope.user.email;
-          $scope.login();
+        LoginService.createUser(vm.user).then(function () {
+          vm.user.username = vm.user.email;
+          vm.login();
         });
       }
     };
 
     var init = function () {
       LoginService.canSetup().then(function (can) {
-        $scope.setup = can;
+        vm.setup = can;
       });
     };
 
@@ -34,5 +35,5 @@
   }
 
   angular.module('rafaelgil.blog')
-    .controller('LoginController', ['$scope', '$state', 'LoginService', LoginController]);
+    .controller('LoginController', ['$state', 'LoginService', LoginController]);
 } ());

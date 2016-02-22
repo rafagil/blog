@@ -1,35 +1,35 @@
 <!-- new post -->
-<button ng-click="create()" ng-if="loggedIn" id="addPostButton"><i class="fa fa-plus-square"></i> Add Post</button>
-<article class="post" ng-show="showAdd" ng-if="loggedIn">
+<button ng-click="vm.create()" ng-if="vm.loggedIn" id="addPostButton"><i class="fa fa-plus-square"></i> Add Post</button>
+<article class="post" ng-show="vm.showAdd" ng-if="vm.loggedIn">
   <header>
     <div class="title">
-      <h2><input type="text" ng-model="newForm.newTitle" placeholder="Title" /></h2>
+      <h2><input type="text" ng-model="vm.newTitle" placeholder="Title" /></h2>
     </div>
     <div class="meta">
-      <a href="#" class="author"><span class="name">{{::currentUser.name}}</span><img src="images/avatar.jpg" alt="" /></a>
+      <a href="#" class="author"><span class="name">{{::vm.currentUser.name}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
   </header>
   <div id="newSummaryEditor">
-    <p>{{newForm.summaryPlaceholder}}</p>
+    <p>{{vm.summaryPlaceholder}}</p>
   </div>
   <div id="newContentEditor">
-    <p>{{newForm.contentPlaceholder}}</p>
+    <p>{{vm.contentPlaceholder}}</p>
   </div>
   <footer>
     <ul class="actions">
       <li>
-        <button ng-click="insert()" class="button big"><i class="fa fa-check-square"></i> Save</button>
+        <button ng-click="vm.insert()" class="button big"><i class="fa fa-check-square"></i> Save</button>
       </li>
     </ul>
   </footer>
 </article>
 <!-- post list -->
-<article class="post" ng-repeat="post in posts">
+<article class="post" ng-repeat="post in vm.posts">
   <header>
     <div class="title">
-      <h2><a href="javascript:void(0)" ng-click="viewPost(post)" ng-hide="post.editing">{{post.title}}</a>
-      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="edit(post)" ng-hide="post.editing" ng-if="loggedIn"></a>
-      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" ng-if="loggedIn" /></h2>
+      <h2><a href="javascript:void(0)" ng-click="vm.viewPost(post)" ng-hide="post.editing">{{post.title}}</a>
+      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="vm.edit(post)" ng-hide="post.editing" ng-if="vm.loggedIn"></a>
+      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" ng-if="vm.loggedIn" /></h2>
     </div>
     <div class="meta">
       <time class="published" datetime="2015-11-01">{{::post.pubDate}}</time>
@@ -41,8 +41,8 @@
   <footer>
     <ul class="actions">
       <li>
-        <a href="javascript:void(0)" class="button big" ng-click="viewPost(post)" ng-hide="post.editing">Continue Reading</a>
-        <button ng-click="save(post)" class="button big" ng-show="post.editing" ng-if="loggedIn"><i class="fa fa-check-square"></i> Save</button>
+        <a href="javascript:void(0)" class="button big" ng-click="vm.viewPost(post)" ng-hide="post.editing">Continue Reading</a>
+        <button ng-click="vm.save(post)" class="button big" ng-show="post.editing" ng-if="vm.loggedIn"><i class="fa fa-check-square"></i> Save</button>
       </li>
     </ul>
     <!--ul class="stats">
@@ -56,9 +56,9 @@
 <!-- Pagination -->
 <ul class="actions pagination">
   <li>
-    <button ng-click="olderPosts()" class="button big previous" ng-show="canGoBack">Older Posts</button>
+    <button ng-click="vm.olderPosts()" class="button big previous" ng-show="vm.canGoBack">Older Posts</button>
   </li>
   <li>
-    <button ng-click="newerPosts()" class="button big next" ng-show="paginationInfo.page > 1">Newer Posts</button>
+    <button ng-click="vm.newerPosts()" class="button big next" ng-show="vm.paginationInfo.page > 1">Newer Posts</button>
   </li>
 </ul>

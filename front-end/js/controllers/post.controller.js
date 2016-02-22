@@ -1,25 +1,26 @@
 (function () {
   'use strict';
 
-  function PostController($scope, $stateParams, PostsService, EditorFactory) {
-    $scope.post = {};
+  function PostController($stateParams, PostsService, EditorFactory) {
+    var vm = this;
+    vm.post = {};
 
     var init = function () {
       if ($stateParams.post) {
-        $scope.post = $stateParams.post;
+        vm.post = $stateParams.post;
       } else {
         PostsService.find($stateParams.url).then(function (post) {
-          $scope.post = post;
+          vm.post = post;
         });
       }
     };
 
-    $scope.edit = function (post) {
+    vm.edit = function (post) {
       post.editor = EditorFactory.build('#post_' + post.id);
       post.editing = true;
     };
 
-    $scope.save = function (post) {
+    vm.save = function (post) {
       var tmpEditor = post.editor;
       delete post.editor;
       post.content = tmpEditor.getContent();
@@ -33,6 +34,6 @@
   }
 
   angular.module('rafaelgil.blog')
-    .controller('PostController', ['$scope', '$stateParams', 'PostsService', 'EditorFactory', PostController]);
+    .controller('PostController', ['$stateParams', 'PostsService', 'EditorFactory', PostController]);
 
 } ());

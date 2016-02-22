@@ -15,18 +15,18 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html',
-        controller: 'LoginController'
+        controller: 'LoginController as vm'
       })
       .state('posts', {
         url: '/',
         templateUrl: 'views/posts.html',
-        controller: 'PostsController'
+        controller: 'PostsController as vm'
       })
       .state('post-view', {
         url: '/:url',
         params: {'post': null},
         templateUrl: 'views/post.html',
-        controller: 'PostController'
+        controller: 'PostController as vm'
       });
 
     $urlRouterProvider.otherwise('/');

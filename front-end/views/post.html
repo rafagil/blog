@@ -1,25 +1,25 @@
 <article class="post">
   <header>
     <div class="title">
-      <h2><a href="#" ng-hide="post.editing">{{post.title}}</a>
-      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="edit(post)" ng-hide="post.editing" ng-if="loggedIn"></a>
-      <input type="text" ng-show="post.editing" ng-model="post.title" placeholder="Title" ng-if="loggedIn" /></h2>
+      <h2><a href="#" ng-hide="vm.post.editing">{{vm.post.title}}</a>
+      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="vm.edit(vm.post)" ng-hide="vm.post.editing" ng-if="vm.loggedIn"></a>
+      <input type="text" ng-show="vm.post.editing" ng-model="vm.post.title" placeholder="Title" ng-if="vm.loggedIn" /></h2>
     </div>
     <div class="meta">
-      <time class="published" datetime="2015-11-01">{{post.pubDate}}</time>
-      <a href="#" class="author"><span class="name">{{post.author}}</span><img src="images/avatar.jpg" alt="" /></a>
+      <time class="published" datetime="2015-11-01">{{vm.post.pubDate}}</time>
+      <a href="#" class="author"><span class="name">{{vm.post.User.name}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
   </header>
   <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
-  <p id="post_{{post.id}}" ng-bind-html="post.content"></p>
+  <p id="post_{{vm.post.id}}" ng-bind-html="vm.post.content"></p>
   <footer>
-    <ul class="actions" ng-if="loggedIn">
+    <ul class="actions" ng-if="vm.loggedIn">
       <li>
-        <button ng-click="save(post)" class="button big" ng-show="post.editing"><i class="fa fa-check-square"></i> Save</button>
+        <button ng-click="vm.save(vm.post)" class="button big" ng-show="vm.post.editing"><i class="fa fa-check-square"></i> Save</button>
       </li>
     </ul>
     <ul class="stats">
-      <li><a href="#">General</a></li>
+      <li><a href="#">Tags</a></li>
       <li><a href="#" class="icon fa-heart">28</a></li>
       <li><a href="#" class="icon fa-comment">128</a></li>
     </ul>

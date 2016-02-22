@@ -1,22 +1,22 @@
-<form ng-submit="login()" ng-if="!setup">
+<form ng-submit="vm.login()" ng-if="!vm.setup">
   <label>Email</label>
-  <input type="email" ng-model="user.username" /><br />
+  <input type="email" ng-model="vm.user.username" /><br />
   <label>Password</label>
-  <input type="password" ng-model="user.password" />
+  <input type="password" ng-model="vm.user.password" />
 
   <button type="submit">Login</button>
 </form>
 
-<form ng-submit="createUser()" ng-if="setup">
+<form ng-submit="vm.createUser()" ng-if="vm.setup">
   <p>Please create an account to continue</p>
   <label>Name</label>
-  <input type="text" ng-model="user.name" /><br />
+  <input type="text" ng-model="vm.user.name" /><br />
   <label>Email</label>
-  <input type="email" ng-model="user.email" /><br />
+  <input type="email" ng-model="vm.user.email" /><br />
   <label>Password</label>
-  <input type="password" ng-model="user.password" /><br />
+  <input type="password" ng-model="vm.user.password" /><br />
   <label>Re-type Password</label>
-  <input type="password" ng-model="user.passwordRetype" />
+  <input type="password" ng-model="vm.user.passwordRetype" />
 
   <button type="submit">Create User</button>
 </form>
