@@ -27,5 +27,10 @@
     "restangular": "~1.5.1",
     "skel": "~3.0.0",
     "underscore": "~1.8.3"
+  },
+  "overrides": {
+    "skel": {
+      "main": "./dist/skel.min.js"
+    }
   }
 }

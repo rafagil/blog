@@ -1,10 +1,8 @@
 /* global angular, Pen */
-angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).config([
-  '$httpProvider',
-  '$stateProvider',
-  '$locationProvider',
-  '$urlRouterProvider',
-  function ($httpProvider, $stateProvider, $locationProvider, $urlRouterProvider) {
+(function () {
+  'use strict';
+
+  function Config($httpProvider, $stateProvider, $locationProvider, $urlRouterProvider) {
     'use strict';
 
     var ua = window.navigator.userAgent;
@@ -15,138 +13,39 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
       .state('login', {
         url: '/login',
         templateUrl: 'views/login.html',
-        controller: 'LoginController'
+        controller: 'LoginController as vm'
       })
-      .state('posts', {
+      .state('main', {
+        abstract: true,
+        controller: 'MainController as main',
+        templateUrl: 'views/main.html'
+      })
+      .state('main.posts', {
         url: '/',
         templateUrl: 'views/posts.html',
-        controller: 'PostsController'
+        controller: 'PostsController as vm'
       })
-      .state('post-view', {
+      .state('main.post-view', {
         url: '/:url',
-        params: {'post': null},
+        params: { 'post': null },
         templateUrl: 'views/post.html',
-        controller: 'PostController'
+        controller: 'PostController as vm'
+      })
+      .state('main.page', {
+        url: '/pages/:url',
+        params: { 'page': null },
+        templateUrl: 'views/page.html',
+        controller: 'PageController as vm'
       });
 
     $urlRouterProvider.otherwise('/');
   }
-]);
-/*
-	Future Imperfect by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
 
-(function($) {
+  angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services'])
+    .config(['$httpProvider', '$stateProvider', '$locationProvider', '$urlRouterProvider', Config]);
 
-	skel.breakpoints({
-		xlarge:	'(max-width: 1680px)',
-		large:	'(max-width: 1280px)',
-		medium:	'(max-width: 980px)',
-		small:	'(max-width: 736px)',
-		xsmall:	'(max-width: 480px)'
-	});
+} ());
 
-	$(function() {
-
-		var	$window = $(window),
-			$body = $('body'),
-			$menu = $('#menu'),
-			$sidebar = $('#sidebar'),
-			$main = $('#main');
-
-		// Disable animations/transitions until the page has loaded.
-			$body.addClass('is-loading');
-
-			$window.on('load', function() {
-				window.setTimeout(function() {
-					$body.removeClass('is-loading');
-				}, 100);
-			});
-
-		// Fix: Placeholder polyfill.
-			$('form').placeholder();
-
-		// Prioritize "important" elements on medium.
-			skel.on('+medium -medium', function() {
-				$.prioritize(
-					'.important\\28 medium\\29',
-					skel.breakpoint('medium').active
-				);
-			});
-
-		// IE<=9: Reverse order of main and sidebar.
-			if (skel.vars.IEVersion <= 9)
-				$main.insertAfter($sidebar);
-
-		// Menu.
-			$menu
-				.appendTo($body)
-				.panel({
-					delay: 500,
-					hideOnClick: true,
-					hideOnSwipe: true,
-					resetScroll: true,
-					resetForms: true,
-					side: 'right',
-					target: $body,
-					visibleClass: 'is-menu-visible'
-				});
-
-		// Search (header).
-			var $search = $('#search'),
-				$search_input = $search.find('input');
-
-			$body
-				.on('click', '[href="#search"]', function(event) {
-
-					event.preventDefault();
-
-					// Not visible?
-						if (!$search.hasClass('visible')) {
-
-							// Reset form.
-								$search[0].reset();
-
-							// Show.
-								$search.addClass('visible');
-
-							// Focus input.
-								$search_input.focus();
-
-						}
-
-				});
-
-			$search_input
-				.on('keydown', function(event) {
-
-					if (event.keyCode == 27)
-						$search_input.blur();
-
-				})
-				.on('blur', function() {
-					window.setTimeout(function() {
-						$search.removeClass('visible');
-					}, 100);
-				});
-
-		// Intro.
-			var $intro = $('#intro');
-
-			// Move to main on <=large, back to sidebar on >large.
-				skel
-					.on('+large', function() {
-						$intro.prependTo($main);
-					})
-					.on('-large', function() {
-						$intro.prependTo($sidebar);
-					});
-
-	});
-
-})(jQuery);
 (function($) {
 
 	/**
@@ -734,143 +633,370 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
 	};
 
 })(jQuery);
-angular.module('rafaelgil.blog').controller('LoginController', ['$scope', '$state', 'LoginService', function ($scope, $state, LoginService) {
+(function () {
   'use strict';
 
-  $scope.setup = false;
-  $scope.user = {};
+  function LoginController($state, LoginService) {
+    var vm = this;
+    vm.setup = false;
+    vm.user = {};
 
-  $scope.login = function() {
-    LoginService.login($scope.user).then(function(user) {
-      $state.go('posts');
-    }).catch(function(e) {
-      alert('Invalid User!');
-    });
-  };
-
-  $scope.createUser = function() {
-    if ($scope.user.password !== $scope.user.passwordRetype) {
-      alert('Both passwords must be the same!');
-    } else {
-      LoginService.createUser($scope.user).then(function() {
-        $scope.user.username = $scope.user.email;
-        $scope.login();
+    vm.login = function () {
+      LoginService.login(vm.user).then(function (user) {
+        $state.go('posts');
+      }).catch(function (e) {
+        alert('Invalid User!');
       });
-    }
-  };
+    };
 
-  var init = function() {
-    LoginService.canSetup().then(function(can) {
-      $scope.setup = can;
-    });
-  };
-
-  init();
-}]);
-angular.module('rafaelgil.blog').controller('PostController', ['$scope', '$stateParams', 'PostsService', 'EditorFactory', function ($scope, $stateParams, PostsService, EditorFactory) {
-  'use strict';
-
-  $scope.post = {};
-
-  var init = function () {
-    if ($stateParams.post) {
-      $scope.post = $stateParams.post;
-    } else {
-      PostsService.find($stateParams.url).then(function (post) {
-        $scope.post = post;
-      });
-    }
-  };
-  
-  $scope.edit = function (post) {
-    post.editor = EditorFactory.build('#post_' + post.id);
-    post.editing = true;
-  };
-
-  $scope.save = function (post) {
-    var tmpEditor = post.editor;
-    delete post.editor;
-    post.content = tmpEditor.getContent();
-    PostsService.update(post).then(function () {
-      tmpEditor.destroy();
-      post.editing = false;
-    });
-  };
-
-  init();
-}]);
-/* global angular, Pen */
-angular.module('rafaelgil.blog').controller('PostsController', ['$scope', '$state', 'PostsService', 'EditorFactory', 'LoginService', function ($scope, $state, PostsService, EditorFactory, LoginService) {
-  'use strict';
-
-  $scope.posts = [];
-  var summaryEditor;
-  var contentEditor;
-
-  var list = function () {
-    PostsService.list().then(function (posts) {
-      $scope.posts = posts;
-
-      if (!posts.length) {
-        LoginService.canSetup().then(function(can) {
-          if (can) {
-            $state.go('login');
-          }
+    vm.createUser = function () {
+      if (vm.user.password !== vm.user.passwordRetype) {
+        alert('Both passwords must be the same!');
+      } else {
+        LoginService.createUser(vm.user).then(function () {
+          vm.user.username = vm.user.email;
+          vm.login();
         });
       }
-    });
-  };
-
-  $scope.create = function () {
-    $scope.showAdd = true;
-    summaryEditor = EditorFactory.build('#newSummaryEditor');
-    contentEditor = EditorFactory.build('#newContentEditor');
-  };
-
-  $scope.insert = function () {
-    var post = {
-      title: $scope.newTitle,
-      content: contentEditor.getContent(),
-      summary: summaryEditor.getContent()
     };
-    PostsService.create(post).then(function () {
-      $scope.init();
-      $scope.showAdd = false;
-      summaryEditor.destroy();
-      contentEditor.destroy();
-    }); //needs tags
-  };
 
-  $scope.edit = function (post) {
-    post.editor = EditorFactory.build('#post_' + post.id);
-    post.editing = true;
-  };
+    var init = function () {
+      LoginService.canSetup().then(function (can) {
+        vm.setup = can;
+      });
+    };
 
-  $scope.save = function (post) {
-    var tmpEditor = post.editor;
-    delete post.editor;
-    post.summary = tmpEditor.getContent();
-    PostsService.update(post).then(function () {
-      tmpEditor.destroy();
-      post.editing = false;
+    init();
+  }
+
+  angular.module('rafaelgil.blog')
+    .controller('LoginController', ['$state', 'LoginService', LoginController]);
+} ());
+(function () {
+  'use strict';
+
+  function MainController(MainService, PageService, $state) {
+    var main = this;
+
+    main.viewPage = function (page) {
+      PageService.find(page.url).then(function (post) {
+        $state.go('main.page', { page: post, url: page.url }); //Pre-loading the page here prevents opening a page without any content.
+      });
+    };
+
+    MainService.getPages().then(function (pages) {
+      main.pages = pages;
     });
-  };
+  }
 
-  $scope.viewPost = function(post) {
-    PostsService.find(post.url).then(function (post) {
-      $state.go('post-view', {post: post, url: post.url}); //Pre-loading the post here prevents opening a page without any content.
-    });
-  };
+  angular.module('rafaelgil.blog')
+    .controller('MainController', ['MainService', 'PageService', '$state', MainController]);
 
-  $scope.init = function () {
-    $scope.summaryPlaceholder = "Summary goes here!";
-    $scope.contentPlaceholder = "Content goes here!";
-    $scope.newTitle = "";
-    LoginService.getCurrentUser().then(function(user) {
-      $scope.loggedIn = !!user;
-    });
-    list();
-  };
+} ());
+(function () {
+  'use strict';
 
-  $scope.init();
-}]);
+  function PageController($stateParams, PageService, EditorFactory) {
+    var vm = this;
+    vm.page = {};
+
+    var init = function () {
+      if ($stateParams.page) {
+        vm.page = $stateParams.page;
+      } else {
+        PageService.find($stateParams.url).then(function (page) {
+          vm.page = page;
+        });
+      }
+    };
+
+    vm.edit = function (page) {
+      page.editor = EditorFactory.build('#page');
+      page.editing = true;
+    };
+
+    vm.save = function (page) {
+      var tmpEditor = page.editor;
+      delete page.editor;
+      page.content = tmpEditor.getContent();
+      PageService.update(page).then(function () {
+        tmpEditor.destroy();
+        page.editing = false;
+      });
+    };
+
+    init();
+  }
+
+  angular.module('rafaelgil.blog')
+    .controller('PageController', ['$stateParams', 'PageService', 'EditorFactory', PageController]);
+
+} ());
+
+(function () {
+  'use strict';
+
+  function PostController($stateParams, PostsService, EditorFactory) {
+    var vm = this;
+    vm.post = {};
+
+    var init = function () {
+      if ($stateParams.post) {
+        vm.post = $stateParams.post;
+      } else {
+        PostsService.find($stateParams.url).then(function (post) {
+          vm.post = post;
+        });
+      }
+    };
+
+    vm.edit = function (post) {
+      post.editor = EditorFactory.build('#post_' + post.id);
+      post.editing = true;
+    };
+
+    vm.save = function (post) {
+      var tmpEditor = post.editor;
+      delete post.editor;
+      post.content = tmpEditor.getContent();
+      PostsService.update(post).then(function () {
+        tmpEditor.destroy();
+        post.editing = false;
+      });
+    };
+
+    init();
+  }
+
+  angular.module('rafaelgil.blog')
+    .controller('PostController', ['$stateParams', 'PostsService', 'EditorFactory', PostController]);
+
+} ());
+
+/* global angular, Pen */
+(function () {
+  'use strict';
+
+  function PostsController($state, PostsService, EditorFactory, LoginService) {
+    var vm = this;
+
+    vm.paginationInfo = {
+      page: 1,
+      pageSize: 5
+    };
+
+    vm.canGoBack = false;
+    vm.posts = [];
+    vm.currentUser = "";
+    var summaryEditor;
+    var contentEditor;
+
+    var list = function () {
+      PostsService.list(vm.paginationInfo).then(function (result) {
+        vm.canGoBack = (vm.paginationInfo.page) * vm.paginationInfo.pageSize <= result.totalResults;
+        vm.posts = result.posts;
+        if (!result.posts.length) {
+          LoginService.canSetup().then(function (can) {
+            if (can) {
+              $state.go('login');
+            }
+          });
+        }
+        window.scrollTo(0, 0);
+      });
+    };
+
+    vm.create = function () {
+      vm.showAdd = true;
+      summaryEditor = EditorFactory.build('#newSummaryEditor');
+      contentEditor = EditorFactory.build('#newContentEditor');
+    };
+
+    vm.insert = function () {
+      var post = {
+        title: vm.newTitle,
+        content: contentEditor.getContent(),
+        summary: summaryEditor.getContent()
+      };
+      PostsService.create(post).then(function () {
+        vm.init();
+        vm.showAdd = false;
+        summaryEditor.destroy();
+        contentEditor.destroy();
+      }); //needs tags
+    };
+
+    vm.edit = function (post) {
+      post.editor = EditorFactory.build('#post_' + post.id);
+      post.editing = true;
+    };
+
+    vm.save = function (post) {
+      var tmpEditor = post.editor;
+      delete post.editor;
+      post.summary = tmpEditor.getContent();
+      PostsService.update(post).then(function () {
+        tmpEditor.destroy();
+        post.editing = false;
+      });
+    };
+
+    vm.viewPost = function (post) {
+      PostsService.find(post.url).then(function (post) {
+        $state.go('main.post-view', { post: post, url: post.url }); //Pre-loading the post here prevents opening a page without any content.
+      });
+    };
+
+    vm.olderPosts = function () {
+      if (vm.canGoBack) {
+        vm.paginationInfo.page++;
+        list();
+      }
+    };
+
+    vm.newerPosts = function () {
+      if (vm.paginationInfo.page > 1) {
+        vm.paginationInfo.page--;
+        list();
+      }
+    };
+
+    vm.init = function () {
+      vm.summaryPlaceholder = "Summary goes here!";
+      vm.contentPlaceholder = "Content goes here!";
+      vm.newTitle = "";
+      LoginService.getCurrentUser().then(function (user) {
+        vm.loggedIn = !!user;
+        vm.currentUser = user;
+      });
+      list();
+    };
+
+    vm.init();
+  }
+
+  angular.module('rafaelgil.blog')
+    .controller('PostsController', ['$state', 'PostsService', 'EditorFactory', 'LoginService', PostsController]);
+} ());
+
+
+/* global jQuery, skel */
+/**
+ * Old "main.js" from template inserted in a directive in order to run after template dom is ready.
+ */
+(function () {
+
+  function TemplateDirective() {
+
+    var templateDeps = function () {
+      (function ($, skel) {
+
+        skel.breakpoints({
+          xlarge: '(max-width: 1680px)',
+          large: '(max-width: 1280px)',
+          medium: '(max-width: 980px)',
+          small: '(max-width: 736px)',
+          xsmall: '(max-width: 480px)'
+        });
+
+        $(function () {
+
+          var $window = $(window),
+            $body = $('body'),
+            $menu = $('#menu'),
+            $sidebar = $('#sidebar'),
+            $main = $('#main');
+
+          // Disable animations/transitions until the page has loaded.
+          $body.addClass('is-loading');
+
+          $window.on('load', function () {
+            window.setTimeout(function () {
+              $body.removeClass('is-loading');
+            }, 100);
+          });
+
+          // Fix: Placeholder polyfill.
+          $('form').placeholder();
+
+          // Prioritize "important" elements on medium.
+          skel.on('+medium -medium', function () {
+            $.prioritize(
+              '.important\\28 medium\\29',
+              skel.breakpoint('medium').active
+              );
+          });
+
+          // IE<=9: Reverse order of main and sidebar.
+          if (skel.vars.IEVersion <= 9)
+            $main.insertAfter($sidebar);
+
+          // Menu.
+          $menu
+            .appendTo($body)
+            .panel({
+              delay: 500,
+              hideOnClick: true,
+              hideOnSwipe: true,
+              resetScroll: true,
+              resetForms: true,
+              side: 'right',
+              target: $body,
+              visibleClass: 'is-menu-visible'
+            });
+
+          // Search (header).
+          var $search = $('#search'),
+            $search_input = $search.find('input');
+
+          $body
+            .on('click', '[href="#search"]', function (event) {
+              event.preventDefault();
+
+              // Not visible?
+              if (!$search.hasClass('visible')) {
+                // Reset form.
+                $search[0].reset();
+                // Show.
+                $search.addClass('visible');
+                // Focus input.
+                $search_input.focus();
+              }
+            });
+
+          $search_input
+            .on('keydown', function (event) {
+              if (event.keyCode == 27)
+                $search_input.blur();
+            })
+            .on('blur', function () {
+              window.setTimeout(function () {
+                $search.removeClass('visible');
+              }, 100);
+            });
+
+          // Intro.
+          var $intro = $('#intro');
+
+          // Move to main on <=large, back to sidebar on >large.
+          skel
+            .on('+large', function () {
+              $intro.prependTo($main);
+            })
+            .on('-large', function () {
+              $intro.prependTo($sidebar);
+            });
+        });
+
+      })(jQuery, skel);
+    };
+
+    return {
+      restrict: 'E',
+      link: templateDeps
+    };
+  }
+
+  angular.module('rafaelgil.blog')
+    .directive('templateDeps', TemplateDirective);
+} ());
