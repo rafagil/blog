@@ -68,7 +68,7 @@
 
     vm.viewPost = function (post) {
       PostsService.find(post.url).then(function (post) {
-        $state.go('post-view', { post: post, url: post.url }); //Pre-loading the post here prevents opening a page without any content.
+        $state.go('main.post-view', { post: post, url: post.url }); //Pre-loading the post here prevents opening a page without any content.
       });
     };
 

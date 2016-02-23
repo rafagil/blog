@@ -1,10 +1,8 @@
 /* global angular, Pen */
-angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).config([
-  '$httpProvider',
-  '$stateProvider',
-  '$locationProvider',
-  '$urlRouterProvider',
-  function ($httpProvider, $stateProvider, $locationProvider, $urlRouterProvider) {
+(function () {
+  'use strict';
+
+  function Config($httpProvider, $stateProvider, $locationProvider, $urlRouterProvider) {
     'use strict';
 
     var ua = window.navigator.userAgent;
@@ -17,18 +15,33 @@ angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services']).confi
         templateUrl: 'views/login.html',
         controller: 'LoginController as vm'
       })
-      .state('posts', {
+      .state('main', {
+        abstract: true,
+        controller: 'MainController as main',
+        templateUrl: 'views/main.html'
+      })
+      .state('main.posts', {
         url: '/',
         templateUrl: 'views/posts.html',
         controller: 'PostsController as vm'
       })
-      .state('post-view', {
+      .state('main.post-view', {
         url: '/:url',
-        params: {'post': null},
+        params: { 'post': null },
         templateUrl: 'views/post.html',
         controller: 'PostController as vm'
+      })
+      .state('main.page', {
+        url: '/pages/:url',
+        params: { 'page': null },
+        templateUrl: 'views/page.html',
+        controller: 'PageController as vm'
       });
 
     $urlRouterProvider.otherwise('/');
   }
-]);
+
+  angular.module('rafaelgil.blog', ['ui.router', 'rafaelgil.blog.services'])
+    .config(['$httpProvider', '$stateProvider', '$locationProvider', '$urlRouterProvider', Config]);
+
+} ());

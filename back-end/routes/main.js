@@ -19,6 +19,12 @@ module.exports = function (app, enableStaticServer) {
 	app.put('/api/posts/:id', checkAuth, controllers.post.update);
 	app.post('/api/posts', checkAuth, controllers.post.add);
 
+  //Pages:
+  app.get('/api/pages', controllers.page.list);
+  app.get('/api/pages/:id', controllers.page.find);
+  app.put('/api/pages/:id', checkAuth, controllers.page.update);
+  app.post('/api/pages', checkAuth, controllers.page.add);
+
   //Login:
   app.post('/api/login', passport.authenticate('local'), function(req, res) {
     res.status(200).end();
