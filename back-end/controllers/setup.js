@@ -4,7 +4,7 @@ module.exports = function(app) {
   var UserRepo = app.repositories.userRepository;
 
   ctrl.canSetup = function(req, res) {
-    UserRepo.adminExists().then(function(exists) {
+    return UserRepo.adminExists().then(function(exists) {
       if (exists) {
         res.status(401).end();
       } else {
@@ -14,11 +14,11 @@ module.exports = function(app) {
   };
 
   ctrl.createUser = function(req, res) {
-    UserRepo.adminExists().then(function(exists) {
+    return UserRepo.adminExists().then(function(exists) {
       if (exists) {
         res.status(401).end();
       } else {
-        UserRepo.create(req.body).then(function(user) {
+        return UserRepo.create(req.body).then(function(user) {
           res.status(201).json(user);
         }).catch(function(e) {
           res.status(403).json(e);

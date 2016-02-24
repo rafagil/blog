@@ -5,6 +5,7 @@
     <ul>
       <li><a href="javascript:void(0)" ui-sref="main.posts">Blog</a></li>
       <li ng-repeat="page in main.pages"><a href="javascript:void(0)" ng-click="main.viewPage(page)">{{::page.title}}</a></li>
+      <li ng-if="main.loggedIn">Add</li>
     </ul>
   </nav>
 </header>

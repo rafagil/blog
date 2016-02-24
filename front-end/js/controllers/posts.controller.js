@@ -90,10 +90,6 @@
       vm.summaryPlaceholder = "Summary goes here!";
       vm.contentPlaceholder = "Content goes here!";
       vm.newTitle = "";
-      LoginService.getCurrentUser().then(function (user) {
-        vm.loggedIn = !!user;
-        vm.currentUser = user;
-      });
       list();
     };
 

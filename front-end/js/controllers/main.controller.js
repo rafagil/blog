@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  function MainController(MainService, PageService, $state) {
+  function MainController(MainService, PageService, LoginService, $state) {
     var main = this;
 
     main.viewPage = function (page) {
@@ -13,9 +13,14 @@
     MainService.getPages().then(function (pages) {
       main.pages = pages;
     });
+    
+    LoginService.getCurrentUser().then(function (user) {
+      main.loggedIn = !!user;
+      main.currentUser = user;
+    });
   }
 
   angular.module('rafaelgil.blog')
-    .controller('MainController', ['MainService', 'PageService', '$state', MainController]);
+    .controller('MainController', ['MainService', 'PageService', 'LoginService', '$state', MainController]);
 
 } ());
