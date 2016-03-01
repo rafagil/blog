@@ -19,6 +19,8 @@
 
         $(function () {
 
+          $('.menu').hide();
+
           var $window = $(window),
             $body = $('body'),
             $menu = $('#menu'),
@@ -103,7 +105,14 @@
             })
             .on('-large', function () {
               $intro.prependTo($sidebar);
+            })
+            .on('+medium', function() {
+              $('.menu').show()
+            })
+            .on('-medium', function() {
+              $('.menu').hide()
             });
+            
         });
 
       })(jQuery, skel);
