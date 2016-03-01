@@ -2,12 +2,12 @@
   <header>
     <div class="title">
       <h2><a href="#" ng-hide="vm.page.editing">{{vm.page.title}}</a>
-      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="vm.edit(vm.page)" ng-hide="vm.page.editing" ng-if="vm.loggedIn"></a>
-      <input type="text" ng-show="vm.page.editing" ng-model="vm.page.title" placeholder="Title" ng-if="vm.loggedIn" /></h2>
+      <a href="javascript:void(0)" class="fa fa-pencil-square" ng-click="vm.edit(vm.page)" ng-hide="vm.page.editing" ng-if="main.loggedIn"></a>
+      <input type="text" ng-show="vm.page.editing" ng-model="vm.page.title" placeholder="Title" ng-if="main.loggedIn" /></h2>
     </div>
   </header>
   <p id="page" ng-bind-html="vm.page.content"></p>
-  <footer ng-if="vm.loggedIn">
+  <footer ng-if="main.loggedIn">
     <ul class="actions">
       <li>
         <button ng-click="vm.save(vm.page)" class="button big" ng-show="vm.page.editing"><i class="fa fa-check-square"></i> Save</button>

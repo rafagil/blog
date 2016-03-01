@@ -5,10 +5,40 @@
     <ul>
       <li><a href="javascript:void(0)" ui-sref="main.posts">Blog</a></li>
       <li ng-repeat="page in main.pages"><a href="javascript:void(0)" ng-click="main.viewPage(page)">{{::page.title}}</a></li>
-      <li ng-if="main.loggedIn">Add</li>
+      <li ng-if="main.addingPage">
+        <input type="text" ng-model="main.newPageTitle" />
+      </li>
+      <li ng-if="main.loggedIn" ng-hide="main.addingPage" ng-click="main.addingPage = true" style="cursor:pointer">Add</li>
+      <li ng-if="main.addingPage" ng-click="main.savePage()" style="border:none;padding-left:0;cursor:pointer">Save</li>
+    </ul>
+  </nav>
+  <nav class="main">
+    <ul>
+      <li class="menu">
+        <a class="fa-bars" href="#menu">Menu</a>
+      </li>
     </ul>
   </nav>
 </header>
+
+<section id="menu">
+
+  <!-- Links -->
+  <section>
+    <ul class="links">
+      <li ng-repeat="page in main.pages"><a href="javascript:void(0)" ng-click="main.viewPage(page)">{{::page.title}}</a></li>
+    </ul>
+  </section>
+
+  <!-- Actions -->
+  <section ng-if="main.loggedIn">
+    <ul class="actions vertical">
+      <li><a ng-click="main.logout()" class="button big fit">Log Out</a></li>
+    </ul>
+  </section>
+
+</section>
+
 <!-- Main -->
 <div id="main" ui-view></div>
 

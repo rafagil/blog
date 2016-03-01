@@ -1,8 +1,22 @@
-<form ng-submit="vm.login()" ng-if="!vm.setup">
+
+<!-- Header -->
+<header id="header">
+  <h1><a href="#">Rafael Gil</a></h1>
+  <nav class="links">
+    <ul>
+      <li><a href="javascript:void(0)" ui-sref="main.posts">Blog</a></li>
+      <li ng-repeat="page in main.pages"><a href="javascript:void(0)" ng-click="main.viewPage(page)">{{::page.title}}</a></li>
+      <li ng-if="main.loggedIn">Add</li>
+    </ul>
+  </nav>
+</header>
+<!-- Main -->
+<div id="main">
+  <form ng-submit="vm.login()" ng-if="!vm.setup">
   <label>Email</label>
   <input type="email" ng-model="vm.user.username" /><br />
   <label>Password</label>
-  <input type="password" ng-model="vm.user.password" />
+  <input type="password" ng-model="vm.user.password" /><br />
 
   <button type="submit">Login</button>
 </form>
@@ -20,3 +34,5 @@
 
   <button type="submit">Create User</button>
 </form>
+</div>
+<template-deps />

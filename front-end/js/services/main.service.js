@@ -6,8 +6,8 @@
       pages: []
     };
 
-    service.getPages = function() {
-      if (service.pages.length) {
+    service.getPages = function(refresh) {
+      if (!refresh && service.pages.length) {
         return $q(function(resolve) {
           return service.pages;
         });

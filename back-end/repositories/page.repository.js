@@ -15,7 +15,7 @@ module.exports = function (app) {
   };
 
   repo.findByURL = function (url) {
-    return Page.find({ url: url }).then(function (page) {
+    return Page.find({ where: { url: url } }).then(function (page) {
       return page;
     });
   };

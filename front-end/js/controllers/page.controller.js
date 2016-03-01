@@ -3,6 +3,7 @@
 
   function PageController($stateParams, PageService, EditorFactory) {
     var vm = this;
+    var main = $stateParams.parentCtrl;
     vm.page = {};
 
     var init = function () {
@@ -27,6 +28,9 @@
       PageService.update(page).then(function () {
         tmpEditor.destroy();
         page.editing = false;
+        if (main) {
+          main.loadPages(true);
+        }
       });
     };
 

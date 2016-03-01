@@ -33,7 +33,8 @@
       })
       .state('main.page', {
         url: '/pages/:url',
-        params: { 'page': null },
+        parent: 'main',
+        params: { 'page': null, 'parentCtrl': null },
         templateUrl: 'views/page.html',
         controller: 'PageController as vm'
       });

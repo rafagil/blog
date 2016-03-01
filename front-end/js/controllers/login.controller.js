@@ -8,7 +8,7 @@
 
     vm.login = function () {
       LoginService.login(vm.user).then(function (user) {
-        $state.go('posts');
+        $state.go('main.posts');
       }).catch(function (e) {
         alert('Invalid User!');
       });

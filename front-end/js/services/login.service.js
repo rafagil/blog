@@ -11,6 +11,10 @@
         service.currentUser = user;
       });
     };
+    
+    service.logout = function () {
+      return Restangular.one('logout').get();
+    };
 
     service.canSetup = function () {
       return Restangular.one('setup').get().then(function () {
