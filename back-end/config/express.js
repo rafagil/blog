@@ -24,7 +24,7 @@ module.exports = function(databasePath) {
   app.use(bodyParser.urlencoded({
     extended: true
   }));
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit: '10mb'}));
 
   app.handleError = function(err, res) {
     console.log(err);

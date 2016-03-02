@@ -15,6 +15,9 @@ module.exports = function(conn, Sequelize) {
     },
     url: {
       type: Sequelize.STRING
+    },
+    image: {
+      type: Sequelize.STRING //Base64
     }
   }, {
     classMethods: {

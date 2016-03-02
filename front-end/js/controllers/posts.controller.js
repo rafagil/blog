@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  function PostsController($state, PostsService, EditorFactory, LoginService) {
+  function PostsController($state, PostsService, EditorFactory, LoginService, FileUploadService) {
     var vm = this;
 
     vm.paginationInfo = {
@@ -86,7 +86,7 @@
         list();
       }
     };
-
+    
     vm.init = function () {
       vm.summaryPlaceholder = "Summary goes here!";
       vm.contentPlaceholder = "Content goes here!";
@@ -98,6 +98,6 @@
   }
 
   angular.module('rafaelgil.blog')
-    .controller('PostsController', ['$state', 'PostsService', 'EditorFactory', 'LoginService', PostsController]);
+    .controller('PostsController', ['$state', 'PostsService', 'EditorFactory', 'LoginService', 'FileUploadService', PostsController]);
 } ());
 

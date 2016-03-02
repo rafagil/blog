@@ -36,7 +36,9 @@
       <a href="#" class="author"><span class="name">{{::post.User.name}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
   </header>
-  <!--a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a-->
+  
+  <input type="file" post="post" file-model="post.image" ng-if="post.editing" />
+  <a href="#" class="image featured"><img src="{{post.image}}" alt="" /></a>
   <p id="post_{{post.id}}" ng-bind-html="::post.summary"></p>
   <footer>
     <ul class="actions">
