@@ -16,6 +16,7 @@ module.exports = function (app, enableStaticServer) {
   //Posts:
 	app.get('/api/posts', controllers.post.list);
 	app.get('/api/posts/:id', controllers.post.find);
+  app.get('/api/posts/image/:id', controllers.post.getImage);
 	app.put('/api/posts/:id', checkAuth, controllers.post.update);
 	app.post('/api/posts', checkAuth, controllers.post.add);
 

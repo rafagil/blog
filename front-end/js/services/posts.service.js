@@ -37,6 +37,12 @@
     service.update = function (post) {
       return post.put();
     };
+    
+    service.getImage = function (post) {
+      return Restangular.all('posts').one('image', post.id).get().then(function(postImage) {
+        post.image = postImage.image;
+      });
+    };
 
     return service;
   }

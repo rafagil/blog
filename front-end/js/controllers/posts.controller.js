@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  function PostsController($state, PostsService, EditorFactory, LoginService, FileUploadService) {
+  function PostsController($state, PostsService, EditorFactory, LoginService) {
     var vm = this;
 
     vm.paginationInfo = {
@@ -25,6 +25,10 @@
             if (can) {
               $state.go('login');
             }
+          });
+        } else {
+          vm.posts.forEach(function(post) {
+            PostsService.getImage(post);
           });
         }
         window.scrollTo(0, 0);
@@ -98,6 +102,6 @@
   }
 
   angular.module('rafaelgil.blog')
-    .controller('PostsController', ['$state', 'PostsService', 'EditorFactory', 'LoginService', 'FileUploadService', PostsController]);
+    .controller('PostsController', ['$state', 'PostsService', 'EditorFactory', 'LoginService', PostsController]);
 } ());
 

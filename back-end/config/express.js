@@ -40,7 +40,7 @@ module.exports = function(databasePath) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  return sequelize(databasePath).then(function(models) {;
+  return sequelize(databasePath).then(function(models) {
       app.models = models;
       load('repositories').then('controllers').into(app);
       require('./passport')(app.models);

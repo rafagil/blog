@@ -12,6 +12,7 @@ module.exports = function (app) {
   repo.list = function (page, pageSize) {
     var params = {
       order: [['createdAt', 'DESC']],
+      attributes: ['id', 'title', 'content', 'summary', 'pubDate', 'url'],
       include: [User]
     };
 
@@ -36,13 +37,19 @@ module.exports = function (app) {
       }, User]
     };
 
-    return Post.find(params).then(function (post) {
-      return post;
-    });
+    return Post.find(params);
   };
 
   repo.findById = function (id) {
     return Post.findById(id);
+  };
+  
+  repo.getImage = function (id) {
+    var params = {
+      attributes: ['image'],
+      where: {id: id}
+    };
+    return Post.find(params);
   };
 
   repo.addUrl = function (title, postId) {

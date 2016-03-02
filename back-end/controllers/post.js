@@ -27,6 +27,16 @@ module.exports = function (app) {
       }
     });
   };
+  
+  PostController.getImage = function(req, resp) {
+    return PostRepo.getImage(req.params.id).then(function (post) {
+      if (post) {
+        resp.json(post);
+      } else {
+        resp.status(404).end();
+      }
+    });
+  };
 
   PostController.add = function (req, resp) {
     req.body.UserId = req.user.id;
