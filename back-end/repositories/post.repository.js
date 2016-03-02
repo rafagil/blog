@@ -58,6 +58,7 @@ module.exports = function (app) {
 
   repo.create = function (post) {
     post.url = getUrlFromTitle(post.title);
+    post.pubDate = new Date();
     return Post.create(post).then(function (post) {
       return repo.addUrl(post.title, post.id).then(function (url) { //TODO: move the PostURL handle to a sequelize hook
         return post; //It must return the post, not the URL!

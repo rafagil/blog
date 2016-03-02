@@ -6,22 +6,18 @@
       <input type="text" ng-show="vm.post.editing" ng-model="vm.post.title" placeholder="Title" ng-if="main.loggedIn" /></h2>
     </div>
     <div class="meta">
-      <time class="published" datetime="2015-11-01">{{vm.post.pubDate}}</time>
-      <a href="#" class="author"><span class="name">{{vm.post.User.name}}</span><img src="images/avatar.jpg" alt="" /></a>
+      <time class="published" datetime="2015-11-01">{{::vm.post.pubDate | date : 'MMMM d, yyyy'}}</time>
+      <a href="#" class="author"><span class="name">{{::vm.post.User.name}}</span><img src="images/avatar.jpg" alt="" /></a>
     </div>
   </header>
-  <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>
+  <input type="file" file-model="vm.post.image" ng-if="vm.post.editing" />
+  <a class="image featured"><img src="{{vm.post.image}}" alt="" /></a>
   <p id="post_{{vm.post.id}}" ng-bind-html="vm.post.content"></p>
   <footer>
     <ul class="actions" ng-if="main.loggedIn">
       <li>
         <button ng-click="vm.save(vm.post)" class="button big" ng-show="vm.post.editing"><i class="fa fa-check-square"></i> Save</button>
       </li>
-    </ul>
-    <ul class="stats">
-      <li><a href="#">Tags</a></li>
-      <li><a href="#" class="icon fa-heart">28</a></li>
-      <li><a href="#" class="icon fa-comment">128</a></li>
     </ul>
   </footer>
 </article>
